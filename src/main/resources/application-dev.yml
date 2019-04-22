@@ -1,7 +1,9 @@
 server:
   port: 8011
-rmq:
-  nameServer : ry4-main-rocketmq-nameserver1.hl:9876;ry4-main-rocketmq-nameserver2.hl:9876;
-  topic : Reidx4Api_UserData
+datasource:
+  url : jdbc:mysql://localhost:3306/goodthings;
+  username : root;
+  password : root;
+  driver-class-name : com.mysql.jdbc.Driver
 swagger:
   enable : true
