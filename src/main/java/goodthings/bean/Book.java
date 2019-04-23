@@ -9,6 +9,15 @@ public class Book {
     private String press;
     private String desc;
     private String caution;
+    private String add_time;
+
+    public String getAdd_time() {
+        return add_time;
+    }
+
+    public void setAdd_time(String add_time) {
+        this.add_time = add_time;
+    }
 
     public int getId() {
         return id;
