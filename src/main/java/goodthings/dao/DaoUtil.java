@@ -25,12 +25,15 @@ public class DaoUtil {
         jdbcTemplate.batchUpdate(goodsSql, tagSql, popularSql);
     }
 
-    public List<Book> searchAllBooks(String isdel) {
-        String sql = "select id,book_name,out_link,pic_link,author,press,desc,caution,add_time from book where isdel = '" + isdel + "'";
+    public List<Book> searchAllBooks(String isDel) {
+        String sql = "select id,book_name,out_link,pic_link,author,press,desc,caution,add_time from book where isdel = '" + isDel + "'";
         return (List<Book>) jdbcTemplate.query(sql, new BookRowMapper());
     }
-    public List<Book> searchBooks(){
-        String sql = "select id,book_name,out_link,pic_link,author,press,desc,caution,add_time from book where isdel = '";
+    public List<Book> searchBooks(String tagIds,int offset,int pageSize){
+        String sql = "select a.id,a.book_name,a.out_link,a.pic_link,a.author,a.press,a.desc,a.caution,a.add_time,c.owner_num,c.approval_num from book as a"
+                + " join goods_tag as b on a.id=b.goods_id and b.category_id=" + GoodsCategory.book.value()
+                + " join popular as c on b.goods_id=c.b.goods_id and c.category_id=" + GoodsCategory.book.value()
+                + " where b.tag_id in (" + tagIds + ") order by c.approval_num,c.owner_num desc limit "+offset+","+pageSize;
         return (List<Book>) jdbcTemplate.query(sql, new BookRowMapper());
     }
     public void addBook(){
