@@ -1,4 +1,4 @@
-package goodthings.swagger;
+package goodthings;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +26,7 @@ public class Swagger2 {
                 .apiInfo(apiInfo())
                 .enable(enableSwagger)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.hylanda.nifiplatformapi"))
+                .apis(RequestHandlerSelectors.basePackage("goodthings"))
                 .paths(PathSelectors.any())
                 .build();
     }
