@@ -28,12 +28,12 @@ public class DaoService {
         jdbcTemplate.batchUpdate(goodsSql, tagSql, popularSql);
     }
 
-    public List<StringPair> getDefaultTags(String categoryId) {
+    public List<StringPair> getDefaultTags(int categoryId) {
         String sql = "select tag_id,tag_name from tag where p_tag_id=0 and category_id=" + categoryId;
         return StringPair.transform(jdbcTemplate.queryForList(sql));
     }
 
-    public List<StringPair> getTagByParent(String ptagId) {
+    public List<StringPair> getTagsByParent(int ptagId) {
         String sql = "select tag_id,tag_name from tag where p_tag_id=" + ptagId;
         return StringPair.transform(jdbcTemplate.queryForList(sql));
     }
@@ -49,7 +49,7 @@ public class DaoService {
 
         return (List<Book>) jdbcTemplate.query(sql, new BookRowMapper());
     }
-    public List<Book> searchBooksExcludeHad(String tagIds,String userId,int offset,int pageSize){
+    public List<Book> searchBooksExcludeHad(String tagIds,int userId,int offset,int pageSize){
         String sql = booksql + ",c.owner_num,c.approval_num from book as a"
                 + " join goods_tag as b on a.id=b.goods_id and b.category_id=" + GoodsCategory.book.value()
                 + " join popular as c on b.goods_id=c.b.goods_id and c.category_id=" + GoodsCategory.book.value()
@@ -58,11 +58,10 @@ public class DaoService {
         return (List<Book>) jdbcTemplate.query(sql, new BookRowMapper());
     }
 
-    public List<Book> searchMyBooks(String userId,String wantHad,int offset,int pageSize) {
+    public List<Book> searchMyBooks(int userId,int wantHad,int offset,int pageSize) {
         String sql = booksql + "  from user_goods as b join book as a on b.category_id=" + GoodsCategory.book.value()
                 + " and b.goods_id=a.id and b.user_id=" + userId + " and b.want_had=" + wantHad+" order by b.id limit " + offset + "," + pageSize;
         return (List<Book>) jdbcTemplate.query(sql, new BookRowMapper());
     }
-
 
 }
