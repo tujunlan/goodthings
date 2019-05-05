@@ -32,7 +32,7 @@ public class importGoods {
         JSONArray ja = JSONArray.fromObject(json);
         Connection conn = getConnection();
         String sql = "insert into book(book_name,out_link,pic_link,author,press,add_time) values(?,?,?,?,?,?)";
-        String tagSql = "insert into goods_category(goods_id,category_id,tag_id) values(?,1,1)";
+        String tagSql = "insert into goods_tag(goods_id,category_id,tag_id) values(?,1,2)";
         String popularSql = "insert into popular(goods_id,category_id,owner_num,approval_num) value(?,1,?,?)";
         PreparedStatement stm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         PreparedStatement stmTag = conn.prepareStatement(tagSql);

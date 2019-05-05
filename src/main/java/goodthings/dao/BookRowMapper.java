@@ -19,6 +19,6 @@ public class BookRowMapper implements RowMapper<Book> {
         book.setDesc(resultSet.getString("desc"));
         book.setPress(resultSet.getString("caution"));
         book.setAdd_time(resultSet.getString("add_time"));
-        return null;
+        return book;
     }
 }

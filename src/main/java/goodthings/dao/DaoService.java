@@ -4,6 +4,8 @@ import com.google.common.base.Joiner;
 import goodthings.bean.Book;
 import goodthings.bean.GoodsCategory;
 import goodthings.bean.StringPair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import java.util.Map;
 
 @Service
 public class DaoService {
+    private static final Logger logger = LoggerFactory.getLogger(DaoService.class);
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -44,9 +47,9 @@ public class DaoService {
     public List<Book> searchBooks(String tagIds,int offset,int pageSize){
         String sql = booksql + ",c.owner_num,c.approval_num from book as a"
                 + " join goods_tag as b on a.id=b.goods_id and b.category_id=" + GoodsCategory.book.value()
-                + " join popular as c on b.goods_id=c.b.goods_id and c.category_id=" + GoodsCategory.book.value()
+                + " join popular as c on b.goods_id=c.goods_id and c.category_id=" + GoodsCategory.book.value()
                 + " where b.tag_id in (" + tagIds + ") order by c.approval_num,c.owner_num desc limit " + offset + "," + pageSize;
-
+        logger.info(sql);
         return (List<Book>) jdbcTemplate.query(sql, new BookRowMapper());
     }
     public List<Book> searchBooksExcludeHad(String tagIds,int userId,int offset,int pageSize){
