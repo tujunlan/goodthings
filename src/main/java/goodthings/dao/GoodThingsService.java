@@ -12,11 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
-public class DaoService {
-    private static final Logger logger = LoggerFactory.getLogger(DaoService.class);
+public class GoodThingsService {
+    private static final Logger logger = LoggerFactory.getLogger(GoodThingsService.class);
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

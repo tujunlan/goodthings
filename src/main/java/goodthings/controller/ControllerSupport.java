@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
@@ -33,9 +34,9 @@ import java.util.Set;
  *
  * @author wn
  */
-public class ControllerSupport implements Controller {
+public class ControllerSupport implements Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	public static final String HTTP_HEAD_REFERER = "Referer";

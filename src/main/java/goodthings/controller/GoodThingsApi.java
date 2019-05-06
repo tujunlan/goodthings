@@ -3,7 +3,7 @@ package goodthings.controller;
 import com.alibaba.fastjson.JSONArray;
 import goodthings.bean.Book;
 import goodthings.bean.StringPair;
-import goodthings.dao.DaoService;
+import goodthings.dao.GoodThingsService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -22,14 +22,14 @@ import java.util.List;
 @RequestMapping(value="/goods")
 public class GoodThingsApi{
     @Autowired
-    private DaoService daoService;
+    private GoodThingsService goodThingsService;
 
     @ApiOperation(value = "获取默认大分类", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "category_id", value = "物品种类id", required = true, dataType = "int")})
     @RequestMapping(value = "default_tags", method = RequestMethod.GET)
     public String getDefaultTags(int category_id) {
-        List<StringPair> defaultTags = daoService.getDefaultTags(category_id);
+        List<StringPair> defaultTags = goodThingsService.getDefaultTags(category_id);
         return JSONArray.toJSONString(defaultTags);
     }
 
@@ -38,7 +38,7 @@ public class GoodThingsApi{
             @ApiImplicitParam(name = "p_tag_id", value = "父标签id", required = true, dataType = "int")})
     @RequestMapping(value = "children_tags", method = RequestMethod.GET)
     public String getChildrenTags(int p_tag_id) {
-        List<StringPair> childrenTags = daoService.getTagsByParent(p_tag_id);
+        List<StringPair> childrenTags = goodThingsService.getTagsByParent(p_tag_id);
         return JSONArray.toJSONString(childrenTags);
     }
 
@@ -49,7 +49,7 @@ public class GoodThingsApi{
             @ApiImplicitParam(name = "pagesize", value = "页内数量", required = true, dataType = "int")})
     @RequestMapping(value = "tags_goods", method = RequestMethod.GET)
     public String getGoodsByTags(String tag_ids, int offset, int pagesize) {
-        List<Book> books = daoService.searchBooks(tag_ids, offset, pagesize);
+        List<Book> books = goodThingsService.searchBooks(tag_ids, offset, pagesize);
         return JSONArray.toJSONString(books);
     }
 
@@ -61,7 +61,7 @@ public class GoodThingsApi{
             @ApiImplicitParam(name = "pagesize", value = "页内数量", required = true, dataType = "int")})
     @RequestMapping(value = "tags_goods_excludeme", method = RequestMethod.POST)
     public String getGoodsByTags(String tag_ids, int user_id, int offset, int pagesize) {
-        List<Book> books = daoService.searchBooksExcludeHad(tag_ids, user_id, offset, pagesize);
+        List<Book> books = goodThingsService.searchBooksExcludeHad(tag_ids, user_id, offset, pagesize);
         return JSONArray.toJSONString(books);
     }
 
@@ -73,7 +73,7 @@ public class GoodThingsApi{
             @ApiImplicitParam(name = "pagesize", value = "页内数量", required = true, dataType = "int")})
     @RequestMapping(value = "tags_goods_referme", method = RequestMethod.POST)
     public String getGoodsByTags(int user_id, int want_had, int offset, int pagesize) {
-        List<Book> books = daoService.searchMyBooks(user_id, want_had, offset, pagesize);
+        List<Book> books = goodThingsService.searchMyBooks(user_id, want_had, offset, pagesize);
         return JSONArray.toJSONString(books);
     }
 
