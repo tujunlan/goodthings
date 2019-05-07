@@ -1,6 +1,8 @@
 package goodthings.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.hylanda.service.http.webwind.renderer.Renderer;
 import goodthings.bean.Book;
 import goodthings.bean.StringPair;
 import goodthings.bean.User;
@@ -22,22 +24,26 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value="/users")
-public class UserApi {
+public class UserApi extends ControllerSupport{
     @Autowired
     private UserService userService;
 
     @ApiOperation(value = "用户登录获取用户信息", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "tel", value = "电话", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "nick_name", value = "昵称", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "pwd", value = "密码", required = true, dataType = "String")})
-    @RequestMapping(value = "default_tags", method = RequestMethod.GET)
-    public String login(String tel, String nick_name, String pwd) {
-        User user = userService.loginUser(tel, nick_name, pwd);
+            @ApiImplicitParam(name = "username", value = "帐号", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String")})
+    @RequestMapping(value = "login", method = RequestMethod.POST)
+    public Renderer login(String username, String password) {
+        User user = userService.loginUser(username, password);
         if (user != null) {
-
+            JSONObject jb = new JSONObject();
+            jb.put("uid",user.getUserId());
+            jb.put("avatar", user.getUserId());
+            jb.put("name", user.getNickName());
+            return this.createRenderer(new ControllerResult(20000, jb));
+        }else {
+            return this.createRenderer(new ControllerResult(60204, "Account and password are incorrect."));
         }
-        return JSONArray.toJSONString(user);
     }
 
 }

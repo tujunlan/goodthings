@@ -68,7 +68,7 @@ public class ControllerSupport implements Serializable {
 	 * @return
 	 */
 	public Renderer createRenderer(Object object) {
-		return this.createRenderer(object, RENDERER_TYPE_JSON_GZIP);
+		return this.createRenderer(object, RENDERER_TYPE_JSON);
 	}
 
 	public HttpSession getHttpSession() {
@@ -276,38 +276,5 @@ public class ControllerSupport implements Serializable {
 			exception.printStackTrace();
 		}
 		return t;
-	}
-	public static class ControllerResult implements ControllerStandardResult
-	{
-		private String msg ;
-		private String state ;
-		private Object data;
-		public ControllerResult() {
-
-		}
-		public ControllerResult(String msg, String state, Object data) {
-
-			this.msg = msg;
-			this.state = state;
-			this.data = data;
-		}			
-			public String getMsg() {
-				return msg;
-			}
-			public void setMsg(String msg) {
-				this.msg = msg;
-			}
-			public String getState() {
-				return state;
-			}
-			public void setState(String state) {
-				this.state = state;
-			}
-			public Object getData() {
-				return data;
-			}
-			public void setData(Object data) {
-				this.data = data;
-			}
 	}
 }

@@ -39,20 +39,10 @@ public class UserService {
         }
     }
 
-    public User loginUser(String tel, String nickName, String pwd) {
-        String sql = "select user_id,tel,wechat_id,nick_name,pwd from user where pwd=?";
-        String param;
-        if (StringUtils.isNotBlank(tel)) {
-            sql += " and tel=?";
-            param = tel;
-        } else if (StringUtils.isNotBlank(nickName)) {
-            sql += " and nick_name=?";
-            param = nickName;
-        } else {
-            return null;
-        }
+    public User loginUser(String username,String password) {
+        String sql = "select user_id,tel,wechat_id,nick_name,pwd from user where pwd=? and (tel=? or nick_name=?)";
         try {
-            return jdbcTemplate.queryForObject(sql, new Object[]{pwd, param}, new UserRowMapper());
+            return jdbcTemplate.queryForObject(sql, new Object[]{password, username,username}, new UserRowMapper());
         } catch (DataAccessException e) {
             return null;
         }
