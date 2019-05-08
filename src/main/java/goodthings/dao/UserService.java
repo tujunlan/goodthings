@@ -40,7 +40,7 @@ public class UserService {
     }
 
     public User loginUser(String username,String password) {
-        String sql = "select user_id,tel,wechat_id,nick_name,pwd from user where pwd=? and (tel=? or nick_name=?)";
+        String sql = "select user_id,tel,wechat_id,nick_name,pwd,avatar from user where pwd=? and (tel=? or nick_name=?)";
         try {
             return jdbcTemplate.queryForObject(sql, new Object[]{password, username,username}, new UserRowMapper());
         } catch (DataAccessException e) {
