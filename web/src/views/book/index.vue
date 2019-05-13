@@ -1,10 +1,10 @@
-<!--<template>
+<template>
   <div class="app-container">
     <ui class="goods-list">
       <li class="goods-item" v-for="(item, index) in list">
         <div class="goods-img">
           <img v-bind:src="item.pic_link" v-bind:alt="item.out_link">
-          &lt;!&ndash;div class="flag" v-if="item.ishot">热</div&ndash;&gt;
+          <!--<div class="flag" v-if="item.ishot">热</div>-->
         </div>
         <div class="goods-info">
           <p class="goods-title">{{ item.book_name }}</p>
@@ -18,8 +18,8 @@
       </li>
     </ui>
   </div>
-</template>-->
-<template>
+</template>
+<!--template>
   <div class="app-container">
     <el-table
       v-loading="listLoading"
@@ -41,7 +41,7 @@
       </el-table-column>
     </el-table>
   </div>
-</template>
+</template-->
 <script>
   import {getList} from '@/api/goods'
 
