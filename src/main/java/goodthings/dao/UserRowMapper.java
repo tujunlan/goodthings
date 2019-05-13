@@ -14,8 +14,8 @@ public class UserRowMapper implements RowMapper<User> {
         user.setTel(resultSet.getString("tel"));
         user.setWechatId(resultSet.getString("wechat_id"));
         user.setNickName(resultSet.getString("nick_name"));
-
         user.setPwd(resultSet.getString("pwd"));
+        user.setAvatar(resultSet.getString("avatar"));
         return user;
     }
 }

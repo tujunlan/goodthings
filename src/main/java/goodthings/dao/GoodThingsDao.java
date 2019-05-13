@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class GoodThingsService {
-    private static final Logger logger = LoggerFactory.getLogger(GoodThingsService.class);
+public class GoodThingsDao {
+    private static final Logger logger = LoggerFactory.getLogger(GoodThingsDao.class);
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

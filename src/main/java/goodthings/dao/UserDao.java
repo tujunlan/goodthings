@@ -1,7 +1,6 @@
 package goodthings.dao;
 
 import goodthings.bean.User;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +11,13 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
-public class UserService {
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+public class UserDao {
+    private static final Logger logger = LoggerFactory.getLogger(UserDao.class);
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     public User getUserInfo(Map<String,String> userIdentity) {
-        String sql = "select user_id,tel,wechat_id,nick_name,pwd from user where 1=1";
+        String sql = "select user_id,tel,wechat_id,nick_name,pwd,avatar from user where 1=1";
         String param;
         if(userIdentity.containsKey("tel")){
             sql += " and tel=?";

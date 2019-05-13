@@ -13,8 +13,12 @@ public class ControllerResult {
     }
 
     public ControllerResult(int code, String message) {
+        if (code == 20000) {
+            this.data = message;
+        } else {
+            this.message = message;
+        }
         this.code = code;
-        this.message = message;
     }
     public String toJsonString(){
         return JSONObject.toJSONString(this);

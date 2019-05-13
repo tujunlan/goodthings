@@ -10,6 +10,8 @@ public class Book {
     private String desc;
     private String caution;
     private String add_time;
+    private int owner_num;
+    private int approval_num;
 
     public String getAdd_time() {
         return add_time;
@@ -81,5 +83,21 @@ public class Book {
 
     public void setCaution(String caution) {
         this.caution = caution;
+    }
+
+    public int getOwner_num() {
+        return owner_num;
+    }
+
+    public void setOwner_num(int owner_num) {
+        this.owner_num = owner_num;
+    }
+
+    public int getApproval_num() {
+        return approval_num;
+    }
+
+    public void setApproval_num(int approval_num) {
+        this.approval_num = approval_num;
     }
 }

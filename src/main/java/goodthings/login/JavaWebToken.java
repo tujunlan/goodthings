@@ -1,5 +1,7 @@
 package goodthings.login;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Maps;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -10,11 +12,10 @@ import java.util.Map;
 
 public class JavaWebToken {
 
+    public static final String JWT_SECRET = "aGVsbG8gd29ybGQ=";
     private static Key getKeyInstance() {
-//        return MacProvider.generateKey();
-        //We will sign our JavaWebToken with our ApiKey secret
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary("APP");
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(JWT_SECRET);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
         return signingKey;
     }
@@ -25,7 +26,6 @@ public class JavaWebToken {
 
     public static Map<String, Object> verifyJavaWebToken(String jwt) {
         try {
-
             Map<String, Object> jwtClaims =
                     Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(jwt).getBody();
             return jwtClaims;
@@ -33,5 +33,14 @@ public class JavaWebToken {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static void main(String[] args) {
+        Map<String, Object> userLogin = Maps.newHashMap();
+        userLogin.put("name", "admin");
+        userLogin.put("pwd", "111");
+        String token = createJavaWebToken(userLogin);
+        Map<String, Object> undecrypt = verifyJavaWebToken(token);
+        System.out.println(Joiner.on(",").withKeyValueSeparator("->").join(undecrypt));
     }
 }

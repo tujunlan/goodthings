@@ -2,9 +2,12 @@ package goodthings.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.google.common.base.Joiner;
+import goodthings.filter.RereadRequestFilter;
 import goodthings.util.LoggerUtils;
 import goodthings.util.http.WrappedHttpServletRequest;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -70,11 +73,15 @@ public class LogCostInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object
             handler) throws Exception {
         long start = System.currentTimeMillis();
-        WrappedHttpServletRequest requestWrapper = (WrappedHttpServletRequest) httpServletRequest;
-        String params = IOUtils.toString(requestWrapper.getBody(),httpServletRequest.getCharacterEncoding());
-//        String params = JSON.toJSONString(httpServletRequest.getParameterMap(),SerializerFeature.DisableCircularReferenceDetect,SerializerFeature.WriteMapNullValue);
-        if (params.length() > 1000) {
-            params = params.substring(0, 1000) + "........";
+        String params = "";
+        if (RereadRequestFilter.METHOD_POST.equals(httpServletRequest.getMethod())) {
+            WrappedHttpServletRequest requestWrapper = (WrappedHttpServletRequest) httpServletRequest;
+            params = IOUtils.toString(requestWrapper.getBody(),httpServletRequest.getCharacterEncoding());
+            if (params.length() > 1000) {
+                params = params.substring(0, 1000) + "........";
+            }
+        }else {
+            params = JSON.toJSONString(httpServletRequest.getParameterMap(),SerializerFeature.DisableCircularReferenceDetect,SerializerFeature.WriteMapNullValue);
         }
 
 //        httpServletRequest.setAttribute("postData", params);
