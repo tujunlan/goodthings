@@ -31,7 +31,9 @@ public class GoodThingsApi{
     @RequestMapping(value = "default_tags", method = RequestMethod.GET)
     public String getDefaultTags(int category_id) {
         List<StringPair> defaultTags = goodThingsDao.getDefaultTags(category_id);
-        return JSONArray.toJSONString(defaultTags);
+        JSONObject jb = new JSONObject();
+        jb.put("items", defaultTags);
+        return new ControllerResult(20000, jb).toJsonString();
     }
 
     @ApiOperation(value = "获取子标签", notes = "")
@@ -40,7 +42,9 @@ public class GoodThingsApi{
     @RequestMapping(value = "children_tags", method = RequestMethod.GET)
     public String getChildrenTags(int p_tag_id) {
         List<StringPair> childrenTags = goodThingsDao.getTagsByParent(p_tag_id);
-        return JSONArray.toJSONString(childrenTags);
+        JSONObject jb = new JSONObject();
+        jb.put("items", childrenTags);
+        return new ControllerResult(20000, jb).toJsonString();
     }
 
     @ApiOperation(value = "按标签查物品", notes = "")

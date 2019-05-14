@@ -101,7 +101,7 @@ export const constantRoutes = [
     ]
   },
 
-  {
+  /*{
     path: '/nested',
     component: Layout,
     redirect: '/nested/menu1',
@@ -157,7 +157,7 @@ export const constantRoutes = [
         meta: { title: 'menu2' }
       }
     ]
-  },
+  },*/
 
   {
     path: 'external-link',

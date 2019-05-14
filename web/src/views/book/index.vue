@@ -1,10 +1,27 @@
 <template>
   <div class="app-container">
+    <div>
+      <span>年龄：</span>
+      <ui class="ptag-list">
+        <li class="ptag-item" v-for="(item, index) in ptaglist">
+          <span>{{ item.name }}</span>
+        </li>
+      </ui>
+    </div>
+    <div>
+      <span>主题：</span>
+      <ui class="tag-list">
+        <li class="tag-item" v-for="(item, index) in ctaglist">
+          <span>{{ item.name }}</span>
+        </li>
+      </ui>
+    </div>
+
     <ui class="goods-list">
       <li class="goods-item" v-for="(item, index) in list">
         <div class="goods-img">
           <img v-bind:src="item.pic_link" v-bind:alt="item.out_link">
-          <!--<div class="flag" v-if="item.ishot">热</div>-->
+          <!--div class="flag" v-if="item.ishot">热</div-->
         </div>
         <div class="goods-info">
           <p class="goods-title">{{ item.book_name }}</p>
@@ -19,36 +36,15 @@
     </ui>
   </div>
 </template>
-<!--template>
-  <div class="app-container">
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="Loading"
-      border
-      fit
-      highlight-current-row
-    >
-      <el-table-column label="Title">
-        <template slot-scope="scope">
-          {{ scope.row.book_name }}
-        </template>
-      </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
-</template-->
 <script>
-  import {getList} from '@/api/goods'
+  import {getList,getParentTags,getChildTags} from '@/api/goods'
 
   export default {
     data() {
       return {
         list: null,
+        ptaglist: null,
+        ctaglist: null,
         listLoading: true
       }
     },
@@ -58,6 +54,12 @@
     methods: {
       fetchData() {
         this.listLoading = true
+        getParentTags().then(response => {
+          this.ptaglist = response.data.items
+        })
+        getChildTags().then(response => {
+          this.ctaglist = response.data.items
+        })
         getList().then(response => {
           this.list = response.data.items
           this.listLoading = false
