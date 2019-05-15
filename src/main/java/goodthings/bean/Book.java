@@ -8,7 +8,7 @@ public class Book {
     private String author;
     private String press;
     private String desc;
-    private String caution;
+    private int isdel;
     private String add_time;
     private int owner_num;
     private int approval_num;
@@ -77,12 +77,12 @@ public class Book {
         this.desc = desc;
     }
 
-    public String getCaution() {
-        return caution;
+    public int getIsdel() {
+        return isdel;
     }
 
-    public void setCaution(String caution) {
-        this.caution = caution;
+    public void setIsdel(int isdel) {
+        this.isdel = isdel;
     }
 
     public int getOwner_num() {

@@ -1,6 +1,5 @@
 package goodthings.controller;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import goodthings.bean.Book;
 import goodthings.bean.StringPair;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -47,41 +47,52 @@ public class GoodThingsApi{
         return new ControllerResult(20000, jb).toJsonString();
     }
 
-    @ApiOperation(value = "按标签查物品", notes = "")
+    @ApiOperation(value = "按标签查书", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "tag_ids", value = "标签ids,多个用逗号分隔", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "offset", value = "起点位置", required = true, dataType = "int"),
-            @ApiImplicitParam(name = "pagesize", value = "页内数量", required = true, dataType = "int")})
-    @RequestMapping(value = "tags_goods", method = RequestMethod.GET)
-    public String getGoodsByTags(String tag_ids, int offset, int pagesize) {
-        List<Book> books = goodThingsDao.searchBooks(tag_ids, offset, pagesize);
+            @ApiImplicitParam(name = "user_id", value = "用户id",  dataType = "Integer"),
+            @ApiImplicitParam(name = "page", value = "页码", required = true, dataType = "int"),
+            @ApiImplicitParam(name = "limit", value = "页内数量", required = true, dataType = "int")})
+    @RequestMapping(value = "tags_books", method = RequestMethod.GET)
+    public String getBooksByTags(@NotEmpty String tag_ids, Integer user_id, int page, int limit) {
+        int offset = (page - 1) * limit;
+        List<Book> books;
+        if (user_id!=null && user_id > 0) {
+            books = goodThingsDao.searchBooksExcludeHad(tag_ids, user_id, offset, limit);
+        } else {
+            books = goodThingsDao.searchBooksByTags(tag_ids, offset, limit);
+        }
         JSONObject jb = new JSONObject();
         jb.put("items", books);
         return new ControllerResult(20000, jb).toJsonString();
     }
-
-    @ApiOperation(value = "按标签查物品，排除我有的", notes = "")
+    @ApiOperation(value = "查询所有书", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "tag_ids", value = "标签ids,多个用逗号分隔", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "user_id", value = "用户id", required = true, dataType = "int"),
-            @ApiImplicitParam(name = "offset", value = "起点位置", required = true, dataType = "int"),
-            @ApiImplicitParam(name = "pagesize", value = "页内数量", required = true, dataType = "int")})
-    @RequestMapping(value = "tags_goods_excludeme", method = RequestMethod.POST)
-    public String getGoodsByTags(String tag_ids, int user_id, int offset, int pagesize) {
-        List<Book> books = goodThingsDao.searchBooksExcludeHad(tag_ids, user_id, offset, pagesize);
-        return JSONArray.toJSONString(books);
+            @ApiImplicitParam(name = "book_name", value = "书名", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "page", value = "页码", required = true, dataType = "int"),
+            @ApiImplicitParam(name = "limit", value = "页内数量", required = true, dataType = "int")})
+    @RequestMapping(value = "all_books", method = RequestMethod.GET)
+    public String getAllBooks(String book_name, int page, int limit) {
+        int offset = (page - 1) * limit;
+        long total = goodThingsDao.getCountBooks(book_name, "0");
+        List<Book> books = goodThingsDao.searchAllBooks(book_name, "0", offset, limit);
+        JSONObject jb = new JSONObject();
+        jb.put("total", total);
+        jb.put("items", books);
+        return new ControllerResult(20000, jb).toJsonString();
     }
-
     @ApiOperation(value = "查询所有与我相关的书", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "user_id", value = "用户id", required = true, dataType = "int"),
             @ApiImplicitParam(name = "want_had", value = "想要的传0，已有的传1", required = true, dataType = "int"),
             @ApiImplicitParam(name = "offset", value = "起点位置", required = true, dataType = "int"),
             @ApiImplicitParam(name = "pagesize", value = "页内数量", required = true, dataType = "int")})
-    @RequestMapping(value = "tags_goods_referme", method = RequestMethod.POST)
+    @RequestMapping(value = "tags_books_referme", method = RequestMethod.POST)
     public String getGoodsByTags(int user_id, int want_had, int offset, int pagesize) {
         List<Book> books = goodThingsDao.searchMyBooks(user_id, want_had, offset, pagesize);
-        return JSONArray.toJSONString(books);
+        JSONObject jb = new JSONObject();
+        jb.put("items", books);
+        return new ControllerResult(20000, jb).toJsonString();
     }
 
     @ApiOperation(value = "删除", notes = "")

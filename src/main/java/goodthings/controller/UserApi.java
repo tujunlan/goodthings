@@ -42,6 +42,9 @@ public class UserApi extends ControllerSupport{
             data.put("token", token);
             return new ControllerResult(20000, data).toJsonString();
         }else {
+/*            JSONObject data = new JSONObject();
+            data.put("token", "eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsIm5hbWUiOiJhZG1pbiIsImF2YXRhciI6Imh0dHBzOi8vd3BpbWcud2FsbHN0Y24uY29tL2Y3Nzg3MzhjLWU0ZjgtNDg3MC1iNjM0LTU2NzAzYjRhY2FmZS5naWYifQ.j2QUJazt8m2jUPn5sO_X6rT8rwwBp2PQXCWCGNbt-Vg");
+            return new ControllerResult(20000, data).toJsonString();*/
             return new ControllerResult(60204, "Account and password are incorrect.").toJsonString();
         }
     }

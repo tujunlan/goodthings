@@ -29,7 +29,7 @@ CREATE TABLE `book`  (
   `author` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `press` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `desc` int(11) NULL DEFAULT NULL,
-  `caution` tinyint(1) NOT NULL DEFAULT 0,
+  `isdel` tinyint(1) NOT NULL DEFAULT 0,
   `add_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `upd_time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE

@@ -67,6 +67,18 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/书单维护',
+    component: Layout,
+    children: [
+      {
+        path: 'complex-table',
+        name: 'BookManager',
+        component: () => import('@/views/book/complex-table'),
+        meta: { title: '书单维护', icon: 'form' }
+      }
+    ]
+  },
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',

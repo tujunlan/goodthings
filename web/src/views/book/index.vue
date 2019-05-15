@@ -4,7 +4,9 @@
       <span>年龄：</span>
       <ui class="ptag-list">
         <li class="ptag-item" v-for="(item, index) in ptaglist">
-          <span>{{ item.name }}</span>
+          <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
+            {{ item.name }}
+          </el-checkbox>
         </li>
       </ui>
     </div>
@@ -12,7 +14,9 @@
       <span>主题：</span>
       <ui class="tag-list">
         <li class="tag-item" v-for="(item, index) in ctaglist">
-          <span>{{ item.name }}</span>
+          <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
+            {{ item.name }}
+          </el-checkbox>
         </li>
       </ui>
     </div>
@@ -37,13 +41,25 @@
   </div>
 </template>
 <script>
-  import {getList,getParentTags,getChildTags} from '@/api/goods'
+  import {getParentTags,getChildTags} from '@/api/goods'
+  import {getList} from '@/api/book'
 
   export default {
     data() {
       return {
+        listQuery: {
+          tag_ids: 2,
+          offset: 0,
+          pagesize: 20
+        },
         list: null,
+        ptagQuery: {
+          category_id: 1
+        },
         ptaglist: null,
+        ctagQuery: {
+          p_tag_id: 2
+        },
         ctaglist: null,
         listLoading: true
       }
@@ -54,13 +70,13 @@
     methods: {
       fetchData() {
         this.listLoading = true
-        getParentTags().then(response => {
+        getParentTags(this.ptagQuery).then(response => {
           this.ptaglist = response.data.items
         })
-        getChildTags().then(response => {
+        getChildTags(this.ctagQuery).then(response => {
           this.ctaglist = response.data.items
         })
-        getList().then(response => {
+        getList(this.listQuery).then(response => {
           this.list = response.data.items
           this.listLoading = false
         })

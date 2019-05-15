@@ -1,9 +1,11 @@
 package goodthings.dao;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import goodthings.bean.Book;
 import goodthings.bean.GoodsCategory;
 import goodthings.bean.StringPair;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ public class GoodThingsDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    final String booksql = "select a.id,a.book_name,a.out_link,a.pic_link,a.author,a.press,a.desc,a.caution,a.add_time";
+    final String booksql = "select a.id,a.book_name,a.out_link,a.pic_link,a.author,a.press,a.desc,a.isdel,a.add_time";
     @Transactional
     public void deleteGoods(GoodsCategory category, List<String> goodsIds) {
         String goodsTable = category.name();
@@ -39,15 +41,50 @@ public class GoodThingsDao {
         String sql = "select tag_id,tag_name from tag where p_tag_id=" + ptagId;
         return StringPair.transform(jdbcTemplate.queryForList(sql));
     }
-    public List<Book> searchAllBooks(String isDel,int offset,int pageSize) {
-        String sql = booksql+" from book as a where a.isdel = '" + isDel + "' limit " + offset + "," + pageSize;
+
+    public long getCountBooks(String name, String isDel){
+        String sql = "select count(1) from book as a where 1=1";
+        if (StringUtils.isNotBlank(isDel)) {
+            sql += " and a.isdel = '" + isDel + "'";
+        }
+        if (StringUtils.isNotBlank(name)) {
+            sql += " and a.book_name like %" + name + "%";
+        }
+        return jdbcTemplate.queryForObject(sql, Long.class);
+    }
+    public List<Book> searchAllBooks(String name, String isDel, int offset, int pageSize) {
+        String sql = booksql + " from book as a where 1=1";
+        if (StringUtils.isNotBlank(isDel)) {
+            sql += " and a.isdel = '" + isDel + "'";
+        }
+        if (StringUtils.isNotBlank(name)) {
+            sql += " and a.book_name like %" + name + "%";
+        }
+        sql += " limit " + offset + "," + pageSize;
         return (List<Book>) jdbcTemplate.query(sql, new BookRowMapper());
     }
-    public List<Book> searchBooks(String tagIds,int offset,int pageSize){
+
+    private List<Integer> getChildTagsId(int tagId) {
+        String sql = "select tag_id from tag where p_tag_id=?";
+        List<Integer> ids = jdbcTemplate.queryForList(sql, new Object[]{tagId}, Integer.class);
+        return ids;
+    }
+    public List<Book> searchBooksByTags(String tagIds, int offset, int pageSize){
+        String query = null;
+        List<String> ids = Splitter.on(",").splitToList(tagIds);
+        if (ids.size() == 1) {//有可能是父tag
+            List<Integer> temp = getChildTagsId(Integer.parseInt(tagIds));
+            if (temp != null) {
+                query = Joiner.on(",").join(temp) + "," + tagIds;
+            }
+        }
+        if (query == null) {
+            query = Joiner.on(",").join(ids);
+        }
         String sql = booksql + ",c.owner_num,c.approval_num from book as a"
                 + " join goods_tag as b on a.id=b.goods_id and b.category_id=" + GoodsCategory.book.value()
                 + " join popular as c on b.goods_id=c.goods_id and c.category_id=" + GoodsCategory.book.value()
-                + " where b.tag_id in (" + tagIds + ") order by c.approval_num,c.owner_num desc limit " + offset + "," + pageSize;
+                + " where b.tag_id in (" + query + ") order by c.approval_num,c.owner_num desc limit " + offset + "," + pageSize;
         logger.info(sql);
         return (List<Book>) jdbcTemplate.query(sql, new BookRowMapper());
     }
