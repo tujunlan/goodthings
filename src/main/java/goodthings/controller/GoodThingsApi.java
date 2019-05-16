@@ -28,7 +28,7 @@ public class GoodThingsApi{
     @ApiOperation(value = "获取默认大分类", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "category_id", value = "物品种类id", required = true, dataType = "int")})
-    @RequestMapping(value = "default_tags", method = RequestMethod.GET)
+    @RequestMapping(value = "default_tags", method = RequestMethod.POST)
     public String getDefaultTags(int category_id) {
         List<StringPair> defaultTags = goodThingsDao.getDefaultTags(category_id);
         JSONObject jb = new JSONObject();
@@ -39,7 +39,7 @@ public class GoodThingsApi{
     @ApiOperation(value = "获取子标签", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "p_tag_id", value = "父标签id", required = true, dataType = "int")})
-    @RequestMapping(value = "children_tags", method = RequestMethod.GET)
+    @RequestMapping(value = "children_tags", method = RequestMethod.POST)
     public String getChildrenTags(int p_tag_id) {
         List<StringPair> childrenTags = goodThingsDao.getTagsByParent(p_tag_id);
         JSONObject jb = new JSONObject();
@@ -53,7 +53,7 @@ public class GoodThingsApi{
             @ApiImplicitParam(name = "user_id", value = "用户id",  dataType = "Integer"),
             @ApiImplicitParam(name = "page", value = "页码", required = true, dataType = "int"),
             @ApiImplicitParam(name = "limit", value = "页内数量", required = true, dataType = "int")})
-    @RequestMapping(value = "tags_books", method = RequestMethod.GET)
+    @RequestMapping(value = "tags_books", method = RequestMethod.POST)
     public String getBooksByTags(@NotEmpty String tag_ids, Integer user_id, int page, int limit) {
         int offset = (page - 1) * limit;
         List<Book> books;
@@ -71,7 +71,7 @@ public class GoodThingsApi{
             @ApiImplicitParam(name = "book_name", value = "书名", required = true, dataType = "String"),
             @ApiImplicitParam(name = "page", value = "页码", required = true, dataType = "int"),
             @ApiImplicitParam(name = "limit", value = "页内数量", required = true, dataType = "int")})
-    @RequestMapping(value = "all_books", method = RequestMethod.GET)
+    @RequestMapping(value = "all_books", method = RequestMethod.POST)
     public String getAllBooks(String book_name, int page, int limit) {
         int offset = (page - 1) * limit;
         long total = goodThingsDao.getCountBooks(book_name, "0");
@@ -95,10 +95,37 @@ public class GoodThingsApi{
         return new ControllerResult(20000, jb).toJsonString();
     }
 
+    @ApiOperation(value = "修改书", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "int"),
+            @ApiImplicitParam(name = "book_name", value = "书名", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "out_link", value = "外链", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "author", value = "作者", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "press", value = "出版社", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "desc", value = "作者", required = true, dataType = "String")})
+    @RequestMapping(value = "update_book_info", method = RequestMethod.POST)
+    public String updateBookInfo(int id, String book_name, String author, String press, String out_link, String desc) {
+        goodThingsDao.updateBookInfo(id, book_name, out_link, author, press, desc);
+        return new ControllerResult(20000, "success").toJsonString();
+    }
+    @ApiOperation(value = "创建书", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "book_id", value = "book_id", required = true, dataType = "int"),
+            @ApiImplicitParam(name = "book_name", value = "书名", required = true,  dataType = "String"),
+            @ApiImplicitParam(name = "out_link", value = "外链", required = true,  dataType = "String"),
+            @ApiImplicitParam(name = "author", value = "作者", required = true,  dataType = "String"),
+            @ApiImplicitParam(name = "press", value = "出版社", required = true,  dataType = "String"),
+            @ApiImplicitParam(name = "desc", value = "作者", required = true,  dataType = "String")})
+    @RequestMapping(value = "create_book_info", method = RequestMethod.POST)
+    public String createBookInfo(int book_id,String book_name,String out_link,String author, String press, String desc) {
+        goodThingsDao.updateBookInfo(book_id, book_name, out_link, author, press, desc);
+        return new ControllerResult(20000, "success").toJsonString();
+    }
+
     @ApiOperation(value = "删除", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "category_id", value = "物品类型", required = true, dataType = "int"),
-            @ApiImplicitParam(name = "goods_id", value = "物品id", required = true, dataType = "string", example = "1,2,3")})
+            @ApiImplicitParam(name = "goods_id", value = "物品id", required = true, dataType = "String", example = "1,2,3")})
     @RequestMapping(value = "delete_goods", method = RequestMethod.POST)
     public String delete(String category_id, String goods_id) {
 

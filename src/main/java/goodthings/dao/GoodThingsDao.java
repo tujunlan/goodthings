@@ -103,4 +103,8 @@ public class GoodThingsDao {
         return (List<Book>) jdbcTemplate.query(sql, new BookRowMapper());
     }
 
+    public void updateBookInfo(int book_id, String book_name, String out_link, String author, String press, String desc) {
+        String sql = "update book as a set a.book_name=?,a.out_link=?,a.author=?,a.desc=?,a.press=? where a.id=?";
+        jdbcTemplate.update(sql, new Object[]{book_name, out_link, author, desc,press, book_id});
+    }
 }
