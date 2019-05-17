@@ -2,9 +2,6 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.book_name" placeholder="书名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.type" placeholder="年龄段" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in ageTypeOptions" :key="item.key" lable="item.display_name" :value="item.key" />
-      </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
@@ -32,7 +29,9 @@
       </el-table-column>
       <el-table-column lable="图片" prop="image" width="110px" align="center">
         <template slot-scope="scope">
-          <img :src="scope.row.pic_link"  min-width="70" height="70" />
+          <a :href="scope.row.out_link" target="_blank">
+            <img :src="scope.row.pic_link"  min-width="70" height="70" />
+          </a>
         </template>
       </el-table-column>
       <el-table-column lable="书名" min-width="150px">
@@ -143,7 +142,6 @@ export default {
         book_name: undefined,
         type: undefined
       },
-      ageTypeOptions,
       temp: {
         id: undefined,
         book_name: '',

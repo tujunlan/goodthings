@@ -48,7 +48,7 @@ public class GoodThingsDao {
             sql += " and a.isdel = '" + isDel + "'";
         }
         if (StringUtils.isNotBlank(name)) {
-            sql += " and a.book_name like %" + name + "%";
+            sql += " and a.book_name like '%" + name + "%'";
         }
         return jdbcTemplate.queryForObject(sql, Long.class);
     }
@@ -58,7 +58,7 @@ public class GoodThingsDao {
             sql += " and a.isdel = '" + isDel + "'";
         }
         if (StringUtils.isNotBlank(name)) {
-            sql += " and a.book_name like %" + name + "%";
+            sql += " and a.book_name like '%" + name + "%'";
         }
         sql += " limit " + offset + "," + pageSize;
         return (List<Book>) jdbcTemplate.query(sql, new BookRowMapper());
