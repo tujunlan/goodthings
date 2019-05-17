@@ -49,8 +49,8 @@
       return {
         listQuery: {
           tag_ids: 2,
-          offset: 0,
-          pagesize: 20
+          page: 1,
+          limit: 20
         },
         list: null,
         ptagQuery: {

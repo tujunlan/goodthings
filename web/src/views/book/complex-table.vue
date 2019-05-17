@@ -30,6 +30,11 @@
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
+      <el-table-column lable="图片" prop="image" width="110px" align="center">
+        <template slot-scope="scope">
+          <img :src="scope.row.pic_link"  min-width="70" height="70" />
+        </template>
+      </el-table-column>
       <el-table-column lable="书名" min-width="150px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.book_name }}</span>
@@ -66,10 +71,21 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item lable="年龄段" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in ageTypeOptions" :key="item.key" lable="item.display_name" :value="item.key" />
-          </el-select>
+        <el-form-item lable="图片" prop="pic_link">
+          <div>
+            <el-upload
+              ref="imgUpload"
+              list-type="picture"
+              :auto-upload="false"
+              accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
+              action="#"
+              :limit="1"
+              :before-upload="handleBeforeUpload"
+              :on-preview="handlePictureCardPreview"
+              multiple>
+              <i class="el-icon-upload"></i>
+            </el-upload>
+          </div>
         </el-form-item>
         <el-form-item lable="书名" prop="book_name">
           <el-input v-model="temp.book_name" />
@@ -106,31 +122,11 @@ import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-const ageTypeOptions = [
-  { key: '2', display_name: '3-6岁' },
-  { key: '3', display_name: '7-10岁' },
-  { key: '4', display_name: '11-14岁' }
-]
-
-// arr to obj, such as { CN : "China", US : "USA" }
-const ageTypeKeyValue = ageTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})
-
 export default {
   name: 'ComplexTable',
   components: { Pagination },
   directives: { waves },
   filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    },
     typeFilter(type) {
       return ageTypeKeyValue[type]
     }
@@ -159,8 +155,8 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: 'Edit',
-        create: 'Create'
+        update: '编辑',
+        create: '添加'
       },
       rules: {
         title: [{ required: true, message: 'title is required', trigger: 'blur' }],
@@ -188,13 +184,6 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
-    },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作成功',
-        type: 'success'
-      })
-      row.status = status
     },
     resetTemp() {
       this.temp = {
@@ -262,6 +251,28 @@ export default {
           })
         }
       })
+    },
+    // 图片选择后 保存在 diaLogForm.imgBroadcastList  对象中
+    handleBeforeUpload (file) {
+      const isLt2M = file.size / 1024 / 1024 < 2  // 上传头像图片大小不能超过 2MB
+      if(!(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpg' || file.type === 'image/jpeg')) {
+        this.$notify.warning({
+          title: '警告',
+          message: '请上传格式为image/png, image/gif, image/jpg, image/jpeg的图片'
+        })
+      }
+      let size = file.size / 1024 / 1024 / 2
+      if(size > 2) {
+        this.$notify.warning({
+          title: '警告',
+          message: '图片大小必须小于2M'
+        })
+      }
+    },
+    // 点击文件列表中已上传的文件时的钩子
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
     },
     handleDelete(row) {
       this.$notify({
