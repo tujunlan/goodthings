@@ -1,11 +1,15 @@
 package goodthings.service;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import goodthings.bean.GoodsCategory;
+import goodthings.dao.PictureDao;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,12 +17,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 @Service
 public class PictureService {
-    private String address = "D:/image/";
+    @Autowired
+    private PictureDao pictureDao;
+    private String address = "D:/image";
 
     private static final long MAXSIZE = 1048576;
 
@@ -29,6 +38,10 @@ public class PictureService {
         formatSet.add(".png");
     }
 
+    private synchronized String generateImageId(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        return sdf.format(new Date()) + new Random().nextInt(899) + 100;//随机生成100到900之间的数
+    }
     private String getFormat(FileItem item) {
         long size = item.getSize();
         //设定上传的最大值1MB, 1024*1024
@@ -42,20 +55,22 @@ public class PictureService {
         }
         return format;
     }
-    private File createFile(String athleteIdCard, String format,int categoryId) {
-        //目录结构 address+省份+运动员id.jpg(图片名) 例如 D:/image/HUNAN/123.jpg
-        String team = GoodsCategory.getName(categoryId);
-        String fileName = address + team + "/" + athleteIdCard + format;
-        File file = new File(fileName);
-        if(!file.getParentFile().exists()) {
+
+    private File createFile(int categoryId, String fileName) {
+        //目录结构 例如 D:/image/HUNAN/123.jpg
+        String category = GoodsCategory.getName(categoryId);
+        String relativePath = category + File.pathSeparator + fileName;
+        String fileFullName = FilenameUtils.concat(address, relativePath);
+        File file = new File(fileFullName);
+        if (!file.getParentFile().exists()) {
             //创建多级目录
-            if(!file.getParentFile().mkdirs()) {
+            if (!file.getParentFile().mkdirs()) {
                 throw new RuntimeException("创建文件失败");
             }
         }
-        if(!file.exists()) {
+        if (!file.exists()) {
             try {
-                if(file.createNewFile()) {
+                if (file.createNewFile()) {
                     return file;
                 }
             } catch (IOException e) {
@@ -65,8 +80,8 @@ public class PictureService {
         }
         return file;
     }
-    public void uploadPicture(HttpServletRequest request,int categoryId) {
-        String number = "123";
+    public List<String> uploadPicture(HttpServletRequest request,int categoryId) {
+        List<String> uploadPath = Lists.newArrayList();
         DiskFileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
         upload.setHeaderEncoding("UTF-8");
@@ -76,15 +91,18 @@ public class PictureService {
             List<FileItem> list = upload.parseRequest(request);
             for(FileItem item : list) {
                 if(!item.isFormField()) {
-                    String format = getFormat(item);
+                    String suffix = getFormat(item);
                     inputStream = item.getInputStream();
                     byte[] buffer = new byte[1024];
-                    File file = createFile(number, format, categoryId);
+                    File file = createFile(categoryId, generateImageId() + suffix);
                     fileOutputStream = new FileOutputStream(file);
                     int len = 0;
                     while((len = inputStream.read(buffer)) > 0) {
                         fileOutputStream.write(buffer, 0, len);
                     }
+                    String filePath = file.getPath().replace(address, "");
+                    pictureDao.insertPicture(categoryId, filePath, item.get());
+                    uploadPath.add(filePath);
                 }
             }
         } catch (FileUploadException | IOException e) {
@@ -103,5 +121,6 @@ public class PictureService {
 
             }
         }
+        return uploadPath;
     }
 }

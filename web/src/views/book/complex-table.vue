@@ -255,18 +255,17 @@ export default {
     },
     // 图片选择后 保存在 diaLogForm.imgBroadcastList  对象中
     handleBeforeUpload (file) {
-      const isLt2M = file.size / 1024 / 1024 < 2  // 上传头像图片大小不能超过 2MB
-      if(!(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpg' || file.type === 'image/jpeg')) {
+      if(!(file.type === 'image/png' || file.type === 'image/jpg')) {
         this.$notify.warning({
           title: '警告',
-          message: '请上传格式为image/png, image/gif, image/jpg, image/jpeg的图片'
+          message: '请上传格式为image/png, image/jpg的图片'
         })
       }
-      let size = file.size / 1024 / 1024 / 2
-      if(size > 2) {
+      let size = file.size / 1024 / 1024
+      if(size > 1) {
         this.$notify.warning({
           title: '警告',
-          message: '图片大小必须小于2M'
+          message: '图片大小必须小于1M'
         })
       }
     },

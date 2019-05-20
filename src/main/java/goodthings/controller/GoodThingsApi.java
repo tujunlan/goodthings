@@ -122,21 +122,31 @@ public class GoodThingsApi{
 
     @ApiOperation(value = "创建书", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "book_name", value = "书名", required = true,  dataType = "String"),
-            @ApiImplicitParam(name = "out_link", value = "外链", required = true,  dataType = "String")})
-    public String uploadPicture(HttpServletRequest request, String pic_link, int category_id){
-        pictureService.uploadPicture(request);
+            @ApiImplicitParam(name = "category_id", value = "书名", required = true,  dataType = "int")})
+    @RequestMapping(value = "upload_image", method = RequestMethod.POST)
+    public String upload_image(HttpServletRequest request, int category_id){
+        try {
+            List<String> uploadPth = pictureService.uploadPicture(request, category_id);
+            if(!uploadPth.isEmpty()){
+                return new ControllerResult(20000, uploadPth.get(0)).toJsonString();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ControllerResult(50000, "图片上传失败").toJsonString();
     }
+
     @ApiOperation(value = "创建书", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "book_name", value = "书名", required = true,  dataType = "String"),
-            @ApiImplicitParam(name = "out_link", value = "外链", required = true,  dataType = "String"),
-            @ApiImplicitParam(name = "author", value = "作者", required = true,  dataType = "String"),
-            @ApiImplicitParam(name = "press", value = "出版社", required = true,  dataType = "String"),
-            @ApiImplicitParam(name = "desc", value = "作者", required = true,  dataType = "String")})
+            @ApiImplicitParam(name = "book_name", value = "书名", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "pic_link", value = "图片链接", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "out_link", value = "外链", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "author", value = "作者", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "press", value = "出版社", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "desc", value = "作者", required = true, dataType = "String")})
     @RequestMapping(value = "create_book_info", method = RequestMethod.POST)
-    public String createBookInfo(String book_name,String out_link,String author, String press, String desc) {
-        goodThingsDao.insertBookInfo(book_name, out_link, author, press, desc);
+    public String createBookInfo(String book_name, String pic_link, String out_link, String author, String press, String desc) {
+        goodThingsDao.insertBookInfo(book_name, pic_link, out_link, author, press, desc);
         return new ControllerResult(20000, "success").toJsonString();
     }
 
