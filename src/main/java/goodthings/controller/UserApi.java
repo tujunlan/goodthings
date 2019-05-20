@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import goodthings.bean.User;
 import goodthings.dao.UserDao;
 import goodthings.dto.UserLoginDto;
-import goodthings.login.JavaWebToken;
+import goodthings.token.JavaWebToken;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;

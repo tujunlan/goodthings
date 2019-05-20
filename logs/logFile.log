@@ -1,0 +1,178 @@
+"2019-05-07 07:19:10","thread":"[restartedMain]", "path":"INFO  goodthings.GoodthingsApplication","msg": Starting GoodthingsApplication on yanghua-PC with PID 2112 (D:\IdeaProjects\goodthings\target\classes started by yanghua in D:\IdeaProjects\goodthings)
+"2019-05-07 07:19:10","thread":"[restartedMain]", "path":"INFO  goodthings.GoodthingsApplication","msg": The following profiles are active: dev
+"2019-05-07 07:19:10","thread":"[restartedMain]", "path":"INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor","msg": Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+"2019-05-07 07:19:10","thread":"[restartedMain]", "path":"INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor","msg": For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+"2019-05-07 07:19:12","thread":"[restartedMain]", "path":"INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker","msg": Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$6c6a7a15] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+"2019-05-07 07:19:12","thread":"[restartedMain]", "path":"INFO  o.s.b.w.e.tomcat.TomcatWebServer","msg": Tomcat initialized with port(s): 8080 (http)
+"2019-05-07 07:19:12","thread":"[restartedMain]", "path":"INFO  o.a.coyote.http11.Http11NioProtocol","msg": Initializing ProtocolHandler ["http-nio-8080"]
+"2019-05-07 07:19:12","thread":"[restartedMain]", "path":"INFO  o.a.catalina.core.StandardService","msg": Starting service [Tomcat]
+"2019-05-07 07:19:12","thread":"[restartedMain]", "path":"INFO  o.a.catalina.core.StandardEngine","msg": Starting Servlet engine: [Apache Tomcat/9.0.17]
+"2019-05-07 07:19:12","thread":"[restartedMain]", "path":"INFO  o.a.c.c.C.[Tomcat].[localhost].[/]","msg": Initializing Spring embedded WebApplicationContext
+"2019-05-07 07:19:12","thread":"[restartedMain]", "path":"INFO  o.s.web.context.ContextLoader","msg": Root WebApplicationContext: initialization completed in 2230 ms
+"2019-05-07 07:19:14","thread":"[restartedMain]", "path":"INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping","msg": Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+"2019-05-07 07:19:14","thread":"[restartedMain]", "path":"INFO  o.s.s.c.ThreadPoolTaskExecutor","msg": Initializing ExecutorService 'applicationTaskExecutor'
+"2019-05-07 07:19:14","thread":"[restartedMain]", "path":"INFO  o.s.b.d.a.OptionalLiveReloadServer","msg": LiveReload server is running on port 35729
+"2019-05-07 07:19:14","thread":"[restartedMain]", "path":"INFO  s.d.s.w.p.DocumentationPluginsBootstrapper","msg": Context refreshed
+"2019-05-07 07:19:14","thread":"[restartedMain]", "path":"INFO  s.d.s.w.p.DocumentationPluginsBootstrapper","msg": Found 1 custom documentation plugin(s)
+"2019-05-07 07:19:15","thread":"[restartedMain]", "path":"INFO  s.d.s.w.s.ApiListingReferenceScanner","msg": Scanning for api listing references
+"2019-05-07 07:19:15","thread":"[restartedMain]", "path":"INFO  s.d.s.w.r.o.CachingOperationNameGenerator","msg": Generating unique operation named: getGoodsByTagsUsingPOST_1
+"2019-05-07 07:19:15","thread":"[restartedMain]", "path":"INFO  o.a.coyote.http11.Http11NioProtocol","msg": Starting ProtocolHandler ["http-nio-8080"]
+"2019-05-07 07:19:15","thread":"[restartedMain]", "path":"INFO  o.s.b.w.e.tomcat.TomcatWebServer","msg": Tomcat started on port(s): 8080 (http) with context path ''
+"2019-05-07 07:19:15","thread":"[restartedMain]", "path":"INFO  goodthings.GoodthingsApplication","msg": Started GoodthingsApplication in 5.944 seconds (JVM running for 8.28)
+"2019-05-07 07:19:56","thread":"[http-nio-8080-exec-4]", "path":"INFO  o.a.c.c.C.[Tomcat].[localhost].[/]","msg": Initializing Spring DispatcherServlet 'dispatcherServlet'
+"2019-05-07 07:19:56","thread":"[http-nio-8080-exec-4]", "path":"INFO  o.s.web.servlet.DispatcherServlet","msg": Initializing Servlet 'dispatcherServlet'
+"2019-05-07 07:19:56","thread":"[http-nio-8080-exec-4]", "path":"INFO  o.s.web.servlet.DispatcherServlet","msg": Completed initialization in 90 ms
+"2019-05-07 07:19:57","thread":"[http-nio-8080-exec-1]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/springfox.css,参数:{"v":["2.8.0-SNAPSHOT"]}
+"2019-05-07 07:19:57","thread":"[http-nio-8080-exec-4]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/swagger-ui.css,参数:{"v":["2.8.0-SNAPSHOT"]}
+"2019-05-07 07:19:57","thread":"[http-nio-8080-exec-3]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/springfox.js,参数:{"v":["2.8.0-SNAPSHOT"]}
+"2019-05-07 07:19:57","thread":"[http-nio-8080-exec-2]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/swagger-ui-bundle.js,参数:{"v":["2.8.0-SNAPSHOT"]}
+"2019-05-07 07:19:57","thread":"[http-nio-8080-exec-1]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/springfox.css cost=345
+"2019-05-07 07:19:57","thread":"[http-nio-8080-exec-5]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/swagger-ui-standalone-preset.js,参数:{"v":["2.8.0-SNAPSHOT"]}
+"2019-05-07 07:19:57","thread":"[http-nio-8080-exec-5]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/swagger-ui-standalone-preset.js cost=346
+"2019-05-07 07:19:57","thread":"[http-nio-8080-exec-4]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/swagger-ui.css cost=344
+"2019-05-07 07:19:57","thread":"[http-nio-8080-exec-2]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/swagger-ui-bundle.js cost=347
+"2019-05-07 07:19:57","thread":"[http-nio-8080-exec-3]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/springfox.js cost=349
+"2019-05-07 07:19:57","thread":"[http-nio-8080-exec-6]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/swagger-resources/configuration/ui,参数:{}
+"2019-05-07 07:19:58","thread":"[http-nio-8080-exec-6]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/swagger-resources/configuration/ui cost=418
+"2019-05-07 07:19:58","thread":"[http-nio-8080-exec-7]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/swagger-resources/configuration/security,参数:{}
+"2019-05-07 07:19:58","thread":"[http-nio-8080-exec-7]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/swagger-resources/configuration/security cost=10
+"2019-05-07 07:19:58","thread":"[http-nio-8080-exec-8]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/swagger-resources,参数:{}
+"2019-05-07 07:19:58","thread":"[http-nio-8080-exec-8]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/swagger-resources cost=9
+"2019-05-07 07:19:58","thread":"[http-nio-8080-exec-1]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/fonts/open-sans-v15-latin-regular.woff2,参数:{}
+"2019-05-07 07:19:58","thread":"[http-nio-8080-exec-10]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/fonts/titillium-web-v6-latin-700.woff2,参数:{}
+"2019-05-07 07:19:58","thread":"[http-nio-8080-exec-1]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/fonts/open-sans-v15-latin-regular.woff2 cost=2
+"2019-05-07 07:19:58","thread":"[http-nio-8080-exec-10]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/fonts/titillium-web-v6-latin-700.woff2 cost=3
+"2019-05-07 07:19:59","thread":"[http-nio-8080-exec-5]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/fonts/open-sans-v15-latin-700.woff2,参数:{}
+"2019-05-07 07:20:00","thread":"[http-nio-8080-exec-4]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/fonts/source-code-pro-v7-latin-300.woff2,参数:{}
+"2019-05-07 07:20:00","thread":"[http-nio-8080-exec-4]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/fonts/source-code-pro-v7-latin-300.woff2 cost=1
+"2019-05-07 07:20:00","thread":"[http-nio-8080-exec-5]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/fonts/open-sans-v15-latin-700.woff2 cost=2
+"2019-05-07 07:20:00","thread":"[http-nio-8080-exec-2]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/fonts/source-code-pro-v7-latin-600.woff2,参数:{}
+"2019-05-07 07:20:00","thread":"[http-nio-8080-exec-2]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/fonts/source-code-pro-v7-latin-600.woff2 cost=2
+"2019-05-07 07:20:35","thread":"[http-nio-8080-exec-3]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:127.0.0.1,请求url:/user/login,参数:{}
+"2019-05-07 07:20:35","thread":"[http-nio-8080-exec-3]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:127.0.0.1,请求url:/user/login cost=1
+"2019-05-07 07:20:35","thread":"[http-nio-8080-exec-3]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:127.0.0.1,请求url:/error,参数:{}
+"2019-05-07 07:20:35","thread":"[http-nio-8080-exec-3]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:127.0.0.1,请求url:/error cost=5
+"2019-05-07 07:22:23","thread":"[restartedMain]", "path":"INFO  goodthings.GoodthingsApplication","msg": Starting GoodthingsApplication on yanghua-PC with PID 6476 (D:\IdeaProjects\goodthings\target\classes started by yanghua in D:\IdeaProjects\goodthings)
+"2019-05-07 07:22:23","thread":"[restartedMain]", "path":"INFO  goodthings.GoodthingsApplication","msg": The following profiles are active: dev
+"2019-05-07 07:22:23","thread":"[restartedMain]", "path":"INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor","msg": Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+"2019-05-07 07:22:23","thread":"[restartedMain]", "path":"INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor","msg": For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+"2019-05-07 07:22:24","thread":"[restartedMain]", "path":"INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker","msg": Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$a8f49fee] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+"2019-05-07 07:22:25","thread":"[restartedMain]", "path":"INFO  o.s.b.w.e.tomcat.TomcatWebServer","msg": Tomcat initialized with port(s): 8080 (http)
+"2019-05-07 07:22:25","thread":"[restartedMain]", "path":"INFO  o.a.coyote.http11.Http11NioProtocol","msg": Initializing ProtocolHandler ["http-nio-8080"]
+"2019-05-07 07:22:25","thread":"[restartedMain]", "path":"INFO  o.a.catalina.core.StandardService","msg": Starting service [Tomcat]
+"2019-05-07 07:22:25","thread":"[restartedMain]", "path":"INFO  o.a.catalina.core.StandardEngine","msg": Starting Servlet engine: [Apache Tomcat/9.0.17]
+"2019-05-07 07:22:25","thread":"[restartedMain]", "path":"INFO  o.a.c.c.C.[Tomcat].[localhost].[/]","msg": Initializing Spring embedded WebApplicationContext
+"2019-05-07 07:22:25","thread":"[restartedMain]", "path":"INFO  o.s.web.context.ContextLoader","msg": Root WebApplicationContext: initialization completed in 1592 ms
+"2019-05-07 07:22:26","thread":"[restartedMain]", "path":"INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping","msg": Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+"2019-05-07 07:22:26","thread":"[restartedMain]", "path":"INFO  o.s.s.c.ThreadPoolTaskExecutor","msg": Initializing ExecutorService 'applicationTaskExecutor'
+"2019-05-07 07:22:26","thread":"[restartedMain]", "path":"INFO  o.s.b.d.a.OptionalLiveReloadServer","msg": LiveReload server is running on port 35729
+"2019-05-07 07:22:26","thread":"[restartedMain]", "path":"INFO  s.d.s.w.p.DocumentationPluginsBootstrapper","msg": Context refreshed
+"2019-05-07 07:22:26","thread":"[restartedMain]", "path":"INFO  s.d.s.w.p.DocumentationPluginsBootstrapper","msg": Found 1 custom documentation plugin(s)
+"2019-05-07 07:22:26","thread":"[restartedMain]", "path":"INFO  s.d.s.w.s.ApiListingReferenceScanner","msg": Scanning for api listing references
+"2019-05-07 07:22:26","thread":"[restartedMain]", "path":"INFO  s.d.s.w.r.o.CachingOperationNameGenerator","msg": Generating unique operation named: getGoodsByTagsUsingPOST_1
+"2019-05-07 07:22:26","thread":"[restartedMain]", "path":"INFO  o.a.coyote.http11.Http11NioProtocol","msg": Starting ProtocolHandler ["http-nio-8080"]
+"2019-05-07 07:22:26","thread":"[restartedMain]", "path":"INFO  o.s.b.w.e.tomcat.TomcatWebServer","msg": Tomcat started on port(s): 8080 (http) with context path ''
+"2019-05-07 07:22:26","thread":"[restartedMain]", "path":"INFO  goodthings.GoodthingsApplication","msg": Started GoodthingsApplication in 3.248 seconds (JVM running for 5.604)
+"2019-05-07 07:22:33","thread":"[http-nio-8080-exec-1]", "path":"INFO  o.a.c.c.C.[Tomcat].[localhost].[/]","msg": Initializing Spring DispatcherServlet 'dispatcherServlet'
+"2019-05-07 07:22:33","thread":"[http-nio-8080-exec-1]", "path":"INFO  o.s.web.servlet.DispatcherServlet","msg": Initializing Servlet 'dispatcherServlet'
+"2019-05-07 07:22:33","thread":"[http-nio-8080-exec-1]", "path":"INFO  o.s.web.servlet.DispatcherServlet","msg": Completed initialization in 7 ms
+"2019-05-07 07:47:22","thread":"[http-nio-8080-exec-1]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:127.0.0.1,请求url:/user/login,参数:{}
+"2019-05-07 07:47:22","thread":"[http-nio-8080-exec-1]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:127.0.0.1,请求url:/user/login cost=1489675
+"2019-05-07 07:47:22","thread":"[http-nio-8080-exec-1]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:127.0.0.1,请求url:/error,参数:{}
+"2019-05-07 07:47:22","thread":"[Thread-16]", "path":"INFO  o.s.s.c.ThreadPoolTaskExecutor","msg": Shutting down ExecutorService 'applicationTaskExecutor'
+"2019-05-07 07:47:29","thread":"[restartedMain]", "path":"INFO  goodthings.GoodthingsApplication","msg": Starting GoodthingsApplication on yanghua-PC with PID 1840 (D:\IdeaProjects\goodthings\target\classes started by yanghua in D:\IdeaProjects\goodthings)
+"2019-05-07 07:47:29","thread":"[restartedMain]", "path":"INFO  goodthings.GoodthingsApplication","msg": The following profiles are active: dev
+"2019-05-07 07:47:29","thread":"[restartedMain]", "path":"INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor","msg": Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+"2019-05-07 07:47:29","thread":"[restartedMain]", "path":"INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor","msg": For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+"2019-05-07 07:47:30","thread":"[restartedMain]", "path":"INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker","msg": Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$4072b06e] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+"2019-05-07 07:47:30","thread":"[restartedMain]", "path":"INFO  o.s.b.w.e.tomcat.TomcatWebServer","msg": Tomcat initialized with port(s): 8080 (http)
+"2019-05-07 07:47:30","thread":"[restartedMain]", "path":"INFO  o.a.coyote.http11.Http11NioProtocol","msg": Initializing ProtocolHandler ["http-nio-8080"]
+"2019-05-07 07:47:30","thread":"[restartedMain]", "path":"INFO  o.a.catalina.core.StandardService","msg": Starting service [Tomcat]
+"2019-05-07 07:47:30","thread":"[restartedMain]", "path":"INFO  o.a.catalina.core.StandardEngine","msg": Starting Servlet engine: [Apache Tomcat/9.0.17]
+"2019-05-07 07:47:31","thread":"[restartedMain]", "path":"INFO  o.a.c.c.C.[Tomcat].[localhost].[/]","msg": Initializing Spring embedded WebApplicationContext
+"2019-05-07 07:47:31","thread":"[restartedMain]", "path":"INFO  o.s.web.context.ContextLoader","msg": Root WebApplicationContext: initialization completed in 1393 ms
+"2019-05-07 07:47:31","thread":"[restartedMain]", "path":"INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping","msg": Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+"2019-05-07 07:47:31","thread":"[restartedMain]", "path":"INFO  o.s.s.c.ThreadPoolTaskExecutor","msg": Initializing ExecutorService 'applicationTaskExecutor'
+"2019-05-07 07:47:31","thread":"[restartedMain]", "path":"INFO  o.s.b.d.a.OptionalLiveReloadServer","msg": LiveReload server is running on port 35729
+"2019-05-07 07:47:31","thread":"[restartedMain]", "path":"INFO  s.d.s.w.p.DocumentationPluginsBootstrapper","msg": Context refreshed
+"2019-05-07 07:47:31","thread":"[restartedMain]", "path":"INFO  s.d.s.w.p.DocumentationPluginsBootstrapper","msg": Found 1 custom documentation plugin(s)
+"2019-05-07 07:47:31","thread":"[restartedMain]", "path":"INFO  s.d.s.w.s.ApiListingReferenceScanner","msg": Scanning for api listing references
+"2019-05-07 07:47:31","thread":"[restartedMain]", "path":"INFO  s.d.s.w.r.o.CachingOperationNameGenerator","msg": Generating unique operation named: getGoodsByTagsUsingPOST_1
+"2019-05-07 07:47:32","thread":"[restartedMain]", "path":"INFO  o.a.coyote.http11.Http11NioProtocol","msg": Starting ProtocolHandler ["http-nio-8080"]
+"2019-05-07 07:47:32","thread":"[restartedMain]", "path":"INFO  o.s.b.w.e.tomcat.TomcatWebServer","msg": Tomcat started on port(s): 8080 (http) with context path ''
+"2019-05-07 07:47:32","thread":"[restartedMain]", "path":"INFO  goodthings.GoodthingsApplication","msg": Started GoodthingsApplication in 3.263 seconds (JVM running for 3.923)
+"2019-05-07 07:47:36","thread":"[http-nio-8080-exec-1]", "path":"INFO  o.a.c.c.C.[Tomcat].[localhost].[/]","msg": Initializing Spring DispatcherServlet 'dispatcherServlet'
+"2019-05-07 07:47:36","thread":"[http-nio-8080-exec-1]", "path":"INFO  o.s.web.servlet.DispatcherServlet","msg": Initializing Servlet 'dispatcherServlet'
+"2019-05-07 07:47:36","thread":"[http-nio-8080-exec-1]", "path":"INFO  o.s.web.servlet.DispatcherServlet","msg": Completed initialization in 9 ms
+"2019-05-07 07:47:36","thread":"[http-nio-8080-exec-1]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/swagger-ui.html,参数:{}
+"2019-05-07 07:47:36","thread":"[http-nio-8080-exec-1]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/swagger-ui.html cost=49
+"2019-05-07 07:47:36","thread":"[http-nio-8080-exec-2]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/swagger-resources/configuration/ui,参数:{}
+"2019-05-07 07:47:36","thread":"[http-nio-8080-exec-3]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/favicon-32x32.png,参数:{"v":["2.8.0-SNAPSHOT"]}
+"2019-05-07 07:47:36","thread":"[http-nio-8080-exec-3]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/favicon-32x32.png cost=19
+"2019-05-07 07:47:36","thread":"[http-nio-8080-exec-2]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/swagger-resources/configuration/ui cost=57
+"2019-05-07 07:47:36","thread":"[http-nio-8080-exec-4]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/swagger-resources/configuration/security,参数:{}
+"2019-05-07 07:47:36","thread":"[http-nio-8080-exec-4]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/swagger-resources/configuration/security cost=7
+"2019-05-07 07:47:36","thread":"[http-nio-8080-exec-5]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/swagger-resources,参数:{}
+"2019-05-07 07:47:36","thread":"[http-nio-8080-exec-5]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/swagger-resources cost=6
+"2019-05-07 07:47:41","thread":"[http-nio-8080-exec-7]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/fonts/titillium-web-v6-latin-regular.woff2,参数:{}
+"2019-05-07 07:47:41","thread":"[http-nio-8080-exec-7]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/webjars/springfox-swagger-ui/fonts/titillium-web-v6-latin-regular.woff2 cost=1
+"2019-05-07 07:47:51","thread":"[http-nio-8080-exec-8]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/users/login,参数:{"username":["admin"],"password":["111111"]}
+"2019-05-07 07:47:51","thread":"[http-nio-8080-exec-8]", "path":"INFO  com.zaxxer.hikari.HikariDataSource","msg": HikariPool-1 - Starting...
+"2019-05-07 07:47:51","thread":"[http-nio-8080-exec-8]", "path":"INFO  com.zaxxer.hikari.HikariDataSource","msg": HikariPool-1 - Start completed.
+"2019-05-07 07:47:51","thread":"[http-nio-8080-exec-8]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/users/login cost=589
+"2019-05-07 07:50:26","thread":"[restartedMain]", "path":"INFO  goodthings.GoodthingsApplication","msg": Starting GoodthingsApplication on yanghua-PC with PID 4920 (D:\IdeaProjects\goodthings\target\classes started by yanghua in D:\IdeaProjects\goodthings)
+"2019-05-07 07:50:26","thread":"[restartedMain]", "path":"INFO  goodthings.GoodthingsApplication","msg": The following profiles are active: dev
+"2019-05-07 07:50:26","thread":"[restartedMain]", "path":"INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor","msg": Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+"2019-05-07 07:50:26","thread":"[restartedMain]", "path":"INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor","msg": For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+"2019-05-07 07:50:27","thread":"[restartedMain]", "path":"INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker","msg": Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$3d0ce098] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+"2019-05-07 07:50:28","thread":"[restartedMain]", "path":"INFO  o.s.b.w.e.tomcat.TomcatWebServer","msg": Tomcat initialized with port(s): 8080 (http)
+"2019-05-07 07:50:28","thread":"[restartedMain]", "path":"INFO  o.a.coyote.http11.Http11NioProtocol","msg": Initializing ProtocolHandler ["http-nio-8080"]
+"2019-05-07 07:50:28","thread":"[restartedMain]", "path":"INFO  o.a.catalina.core.StandardService","msg": Starting service [Tomcat]
+"2019-05-07 07:50:28","thread":"[restartedMain]", "path":"INFO  o.a.catalina.core.StandardEngine","msg": Starting Servlet engine: [Apache Tomcat/9.0.17]
+"2019-05-07 07:50:28","thread":"[restartedMain]", "path":"INFO  o.a.c.c.C.[Tomcat].[localhost].[/]","msg": Initializing Spring embedded WebApplicationContext
+"2019-05-07 07:50:28","thread":"[restartedMain]", "path":"INFO  o.s.web.context.ContextLoader","msg": Root WebApplicationContext: initialization completed in 1559 ms
+"2019-05-07 07:50:28","thread":"[restartedMain]", "path":"INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping","msg": Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+"2019-05-07 07:50:28","thread":"[restartedMain]", "path":"INFO  o.s.s.c.ThreadPoolTaskExecutor","msg": Initializing ExecutorService 'applicationTaskExecutor'
+"2019-05-07 07:50:28","thread":"[restartedMain]", "path":"INFO  o.s.b.d.a.OptionalLiveReloadServer","msg": LiveReload server is running on port 35729
+"2019-05-07 07:50:28","thread":"[restartedMain]", "path":"INFO  s.d.s.w.p.DocumentationPluginsBootstrapper","msg": Context refreshed
+"2019-05-07 07:50:28","thread":"[restartedMain]", "path":"INFO  s.d.s.w.p.DocumentationPluginsBootstrapper","msg": Found 1 custom documentation plugin(s)
+"2019-05-07 07:50:28","thread":"[restartedMain]", "path":"INFO  s.d.s.w.s.ApiListingReferenceScanner","msg": Scanning for api listing references
+"2019-05-07 07:50:28","thread":"[restartedMain]", "path":"INFO  s.d.s.w.r.o.CachingOperationNameGenerator","msg": Generating unique operation named: getGoodsByTagsUsingPOST_1
+"2019-05-07 07:50:29","thread":"[restartedMain]", "path":"INFO  o.a.coyote.http11.Http11NioProtocol","msg": Starting ProtocolHandler ["http-nio-8080"]
+"2019-05-07 07:50:29","thread":"[restartedMain]", "path":"INFO  o.s.b.w.e.tomcat.TomcatWebServer","msg": Tomcat started on port(s): 8080 (http) with context path ''
+"2019-05-07 07:50:29","thread":"[restartedMain]", "path":"INFO  goodthings.GoodthingsApplication","msg": Started GoodthingsApplication in 3.408 seconds (JVM running for 4.219)
+"2019-05-07 07:50:35","thread":"[http-nio-8080-exec-3]", "path":"INFO  o.a.c.c.C.[Tomcat].[localhost].[/]","msg": Initializing Spring DispatcherServlet 'dispatcherServlet'
+"2019-05-07 07:50:35","thread":"[http-nio-8080-exec-3]", "path":"INFO  o.s.web.servlet.DispatcherServlet","msg": Initializing Servlet 'dispatcherServlet'
+"2019-05-07 07:50:35","thread":"[http-nio-8080-exec-3]", "path":"INFO  o.s.web.servlet.DispatcherServlet","msg": Completed initialization in 8 ms
+"2019-05-07 07:50:35","thread":"[http-nio-8080-exec-3]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/users/login,参数:{"username":["admin"],"password":["111111"]}
+"2019-05-07 07:50:35","thread":"[http-nio-8080-exec-3]", "path":"INFO  com.zaxxer.hikari.HikariDataSource","msg": HikariPool-1 - Starting...
+"2019-05-07 07:50:35","thread":"[http-nio-8080-exec-3]", "path":"INFO  com.zaxxer.hikari.HikariDataSource","msg": HikariPool-1 - Start completed.
+"2019-05-07 07:50:35","thread":"[http-nio-8080-exec-3]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/users/login cost=302
+"2019-05-07 07:51:46","thread":"[restartedMain]", "path":"INFO  goodthings.GoodthingsApplication","msg": Starting GoodthingsApplication on yanghua-PC with PID 6172 (D:\IdeaProjects\goodthings\target\classes started by yanghua in D:\IdeaProjects\goodthings)
+"2019-05-07 07:51:46","thread":"[restartedMain]", "path":"INFO  goodthings.GoodthingsApplication","msg": The following profiles are active: dev
+"2019-05-07 07:51:46","thread":"[restartedMain]", "path":"INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor","msg": Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+"2019-05-07 07:51:46","thread":"[restartedMain]", "path":"INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor","msg": For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+"2019-05-07 07:51:47","thread":"[restartedMain]", "path":"INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker","msg": Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$6d540ab3] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+"2019-05-07 07:51:48","thread":"[restartedMain]", "path":"INFO  o.s.b.w.e.tomcat.TomcatWebServer","msg": Tomcat initialized with port(s): 8080 (http)
+"2019-05-07 07:51:48","thread":"[restartedMain]", "path":"INFO  o.a.coyote.http11.Http11NioProtocol","msg": Initializing ProtocolHandler ["http-nio-8080"]
+"2019-05-07 07:51:48","thread":"[restartedMain]", "path":"INFO  o.a.catalina.core.StandardService","msg": Starting service [Tomcat]
+"2019-05-07 07:51:48","thread":"[restartedMain]", "path":"INFO  o.a.catalina.core.StandardEngine","msg": Starting Servlet engine: [Apache Tomcat/9.0.17]
+"2019-05-07 07:51:48","thread":"[restartedMain]", "path":"INFO  o.a.c.c.C.[Tomcat].[localhost].[/]","msg": Initializing Spring embedded WebApplicationContext
+"2019-05-07 07:51:48","thread":"[restartedMain]", "path":"INFO  o.s.web.context.ContextLoader","msg": Root WebApplicationContext: initialization completed in 1459 ms
+"2019-05-07 07:51:48","thread":"[restartedMain]", "path":"INFO  s.d.s.w.PropertySourcedRequestMappingHandlerMapping","msg": Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+"2019-05-07 07:51:48","thread":"[restartedMain]", "path":"INFO  o.s.s.c.ThreadPoolTaskExecutor","msg": Initializing ExecutorService 'applicationTaskExecutor'
+"2019-05-07 07:51:48","thread":"[restartedMain]", "path":"INFO  o.s.b.d.a.OptionalLiveReloadServer","msg": LiveReload server is running on port 35729
+"2019-05-07 07:51:48","thread":"[restartedMain]", "path":"INFO  s.d.s.w.p.DocumentationPluginsBootstrapper","msg": Context refreshed
+"2019-05-07 07:51:48","thread":"[restartedMain]", "path":"INFO  s.d.s.w.p.DocumentationPluginsBootstrapper","msg": Found 1 custom documentation plugin(s)
+"2019-05-07 07:51:48","thread":"[restartedMain]", "path":"INFO  s.d.s.w.s.ApiListingReferenceScanner","msg": Scanning for api listing references
+"2019-05-07 07:51:49","thread":"[restartedMain]", "path":"INFO  s.d.s.w.r.o.CachingOperationNameGenerator","msg": Generating unique operation named: getGoodsByTagsUsingPOST_1
+"2019-05-07 07:51:49","thread":"[restartedMain]", "path":"INFO  o.a.coyote.http11.Http11NioProtocol","msg": Starting ProtocolHandler ["http-nio-8080"]
+"2019-05-07 07:51:49","thread":"[restartedMain]", "path":"INFO  o.s.b.w.e.tomcat.TomcatWebServer","msg": Tomcat started on port(s): 8080 (http) with context path ''
+"2019-05-07 07:51:49","thread":"[restartedMain]", "path":"INFO  goodthings.GoodthingsApplication","msg": Started GoodthingsApplication in 3.353 seconds (JVM running for 4.207)
+"2019-05-07 07:51:52","thread":"[http-nio-8080-exec-1]", "path":"INFO  o.a.c.c.C.[Tomcat].[localhost].[/]","msg": Initializing Spring DispatcherServlet 'dispatcherServlet'
+"2019-05-07 07:51:52","thread":"[http-nio-8080-exec-1]", "path":"INFO  o.s.web.servlet.DispatcherServlet","msg": Initializing Servlet 'dispatcherServlet'
+"2019-05-07 07:51:52","thread":"[http-nio-8080-exec-1]", "path":"INFO  o.s.web.servlet.DispatcherServlet","msg": Completed initialization in 6 ms
+"2019-05-07 07:51:52","thread":"[http-nio-8080-exec-1]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/users/login,参数:{"username":["admin"],"password":["111111"]}
+"2019-05-07 07:51:52","thread":"[http-nio-8080-exec-1]", "path":"INFO  com.zaxxer.hikari.HikariDataSource","msg": HikariPool-1 - Starting...
+"2019-05-07 07:51:53","thread":"[http-nio-8080-exec-1]", "path":"INFO  com.zaxxer.hikari.HikariDataSource","msg": HikariPool-1 - Start completed.
+"2019-05-07 07:51:53","thread":"[http-nio-8080-exec-1]", "path":"INFO  g.interceptor.LogCostInterceptor","msg": ip:0:0:0:0:0:0:0:1,请求url:/users/login cost=265

@@ -9,4 +9,13 @@ public enum GoodsCategory {
     public int value() {
         return this.value;
     }
+
+    public static String getName(int value) {
+        for (GoodsCategory g : GoodsCategory.values()) {
+            if (g.value == value) {
+                return g.name();
+            }
+        }
+        return null;
+    }
 }

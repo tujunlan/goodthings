@@ -1,4 +1,4 @@
-package goodthings.login;
+package goodthings.token;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;

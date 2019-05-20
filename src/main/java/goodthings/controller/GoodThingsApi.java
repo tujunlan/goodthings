@@ -4,15 +4,24 @@ import com.alibaba.fastjson.JSONObject;
 import goodthings.bean.Book;
 import goodthings.bean.StringPair;
 import goodthings.dao.GoodThingsDao;
+import goodthings.service.PictureService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotEmpty;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -24,6 +33,8 @@ import java.util.List;
 public class GoodThingsApi{
     @Autowired
     private GoodThingsDao goodThingsDao;
+    @Autowired
+    private PictureService pictureService;
 
     @ApiOperation(value = "获取默认大分类", notes = "")
     @ApiImplicitParams({
@@ -108,17 +119,24 @@ public class GoodThingsApi{
         goodThingsDao.updateBookInfo(id, book_name, out_link, author, press, desc);
         return new ControllerResult(20000, "success").toJsonString();
     }
+
     @ApiOperation(value = "创建书", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "book_id", value = "book_id", required = true, dataType = "int"),
+            @ApiImplicitParam(name = "book_name", value = "书名", required = true,  dataType = "String"),
+            @ApiImplicitParam(name = "out_link", value = "外链", required = true,  dataType = "String")})
+    public String uploadPicture(HttpServletRequest request, String pic_link, int category_id){
+        pictureService.uploadPicture(request);
+    }
+    @ApiOperation(value = "创建书", notes = "")
+    @ApiImplicitParams({
             @ApiImplicitParam(name = "book_name", value = "书名", required = true,  dataType = "String"),
             @ApiImplicitParam(name = "out_link", value = "外链", required = true,  dataType = "String"),
             @ApiImplicitParam(name = "author", value = "作者", required = true,  dataType = "String"),
             @ApiImplicitParam(name = "press", value = "出版社", required = true,  dataType = "String"),
             @ApiImplicitParam(name = "desc", value = "作者", required = true,  dataType = "String")})
     @RequestMapping(value = "create_book_info", method = RequestMethod.POST)
-    public String createBookInfo(int book_id,String book_name,String out_link,String author, String press, String desc) {
-        goodThingsDao.updateBookInfo(book_id, book_name, out_link, author, press, desc);
+    public String createBookInfo(String book_name,String out_link,String author, String press, String desc) {
+        goodThingsDao.insertBookInfo(book_name, out_link, author, press, desc);
         return new ControllerResult(20000, "success").toJsonString();
     }
 

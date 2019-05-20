@@ -14,13 +14,13 @@
     </div>
 
     <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
+    :key="tableKey"
+    v-loading="listLoading"
+    :data="list"
+    border
+    fit
+    highlight-current-row
+    style="width: 100%;"
     >
       <el-table-column lable="序号" prop="id" align="center" width="80">
         <template slot-scope="scope">
@@ -71,20 +71,18 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
         <el-form-item lable="图片" prop="pic_link">
-          <div>
-            <el-upload
-              ref="imgUpload"
-              list-type="picture"
-              :auto-upload="false"
-              accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
-              action="#"
-              :limit="1"
-              :before-upload="handleBeforeUpload"
-              :on-preview="handlePictureCardPreview"
-              multiple>
-              <i class="el-icon-upload"></i>
-            </el-upload>
-          </div>
+          <el-upload
+            ref="imgUpload"
+            list-type="picture-card"
+            :auto-upload="false"
+            accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
+            action="#"
+            :limit="1"
+            :before-upload="handleBeforeUpload"
+            :on-preview="handlePictureCardPreview"
+            :on-success="handlePicUploadSuccess">
+            <i class="el-icon-upload"></i>
+          </el-upload>
         </el-form-item>
         <el-form-item lable="书名" prop="book_name">
           <el-input v-model="temp.book_name" />
@@ -150,6 +148,10 @@ export default {
         out_link: '',
         desc: ''
       },
+      file: {
+        dialogImageUrl: '',
+        imgUrl:''
+      },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -186,11 +188,11 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        importance: 1,
-        remark: '',
-        title: '',
-        status: 'published',
-        type: ''
+        book_name: 1,
+        author: '',
+        press: '',
+        out_link: '',
+        desc: ''
       }
     },
     handleCreate() {
@@ -204,6 +206,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.$refs.imgUpload.submit();
           this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
           this.temp.author = 'vue-element-admin'
           createBook(this.temp).then(() => {
@@ -267,10 +270,13 @@ export default {
         })
       }
     },
-    // 点击文件列表中已上传的文件时的钩子
+    handlePicUploadSuccess:function(res){
+      if(res.status==200){
+        this.file.imgUrl=res.data.imgUrl;
+      }
+    },
     handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+      this.file.dialogImageUrl = file.url;
     },
     handleDelete(row) {
       this.$notify({

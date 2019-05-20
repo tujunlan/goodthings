@@ -1,10 +1,10 @@
-package goodthings.login;
+package goodthings.token;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-import static goodthings.login.JavaWebToken.verifyJavaWebToken;
+import static goodthings.token.JavaWebToken.verifyJavaWebToken;
 
 public class AuthUtil {
     private static Map<String, Object> getClientLoginInfo(HttpServletRequest request) throws Exception {
