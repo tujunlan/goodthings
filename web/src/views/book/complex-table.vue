@@ -22,39 +22,39 @@
     highlight-current-row
     style="width: 100%;"
     >
-      <el-table-column lable="序号" prop="id" align="center" width="80">
+      <el-table-column label="序号" prop="id" align="center" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column lable="图片" prop="image" width="110px" align="center">
+      <el-table-column label="图片" prop="image" width="110px" align="center">
         <template slot-scope="scope">
           <a :href="scope.row.out_link" target="_blank">
             <img :src="scope.row.pic_link"  min-width="70" height="70" />
           </a>
         </template>
       </el-table-column>
-      <el-table-column lable="书名" min-width="150px">
+      <el-table-column label="书名" min-width="150px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.book_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column lable="作者" width="110px" align="center">
+      <el-table-column label="作者" width="110px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.author }}</span>
         </template>
       </el-table-column>
-      <el-table-column lable="出版社" width="80px">
+      <el-table-column label="出版社" width="80px">
         <template slot-scope="scope">
           <span>{{ scope.row.press }}</span>
         </template>
       </el-table-column>
-      <el-table-column lable="简单描述" width="80px">
+      <el-table-column label="简单描述" width="80px">
         <template slot-scope="scope">
           <span>{{ scope.row.desc }}</span>
         </template>
       </el-table-column>
-      <el-table-column lable="操作" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
@@ -70,34 +70,31 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item lable="图片" prop="pic_link">
+        <el-form-item label="图片" prop="pic_link">
           <el-upload
             ref="imgUpload"
-            list-type="picture-card"
             :auto-upload="false"
-            accept="image/jpg,image/png"
             action="/goods/upload_image"
             :data="{category_id:1}"
-            :limit="1"
             :before-upload="handleBeforeUpload"
-            :on-preview="handlePictureCardPreview"
             :on-success="handlePicUploadSuccess">
-            <i class="el-icon-upload"></i>
+            <img v-if="temp.pic_link" :src="temp.pic_link" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item lable="书名" prop="book_name">
+        <el-form-item label="书名" prop="book_name">
           <el-input v-model="temp.book_name" />
         </el-form-item>
-        <el-form-item lable="作者" prop="author">
+        <el-form-item label="作者" prop="author">
           <el-input v-model="temp.author" />
         </el-form-item>
-        <el-form-item lable="出版社" prop="press">
+        <el-form-item label="出版社" prop="press">
           <el-input v-model="temp.press" />
         </el-form-item>
-        <el-form-item lable="外链地址" prop="out_link">
+        <el-form-item label="外链地址" prop="out_link">
           <el-input v-model="temp.out_link" />
         </el-form-item>
-        <el-form-item lable="简介">
+        <el-form-item label="简介">
           <el-input v-model="temp.desc" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
         </el-form-item>
       </el-form>
@@ -113,7 +110,31 @@
 
   </div>
 </template>
-
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>
 <script>
 import { getAllBooks, createBook, updateBook } from '@/api/book'
 import waves from '@/directive/waves' // waves directive
@@ -125,9 +146,6 @@ export default {
   components: { Pagination },
   directives: { waves },
   filters: {
-    typeFilter(type) {
-      return ageTypeKeyValue[type]
-    }
   },
   data() {
     return {
@@ -143,15 +161,12 @@ export default {
       },
       temp: {
         id: undefined,
+        pic_link:'',
         book_name: '',
         author: 1,
         press: '',
         out_link: '',
         desc: ''
-      },
-      file: {
-        dialogImageUrl: '',
-        imgUrl:''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -254,7 +269,6 @@ export default {
         }
       })
     },
-    // 图片选择后 保存在 diaLogForm.imgBroadcastList  对象中
     handleBeforeUpload (file) {
       if(!(file.type === 'image/png' || file.type === 'image/jpg')) {
         this.$notify.warning({
@@ -270,13 +284,8 @@ export default {
         })
       }
     },
-    handlePicUploadSuccess:function(res){
-      if(res.status==200){
-        this.file.imgUrl=res.data.imgUrl;
-      }
-    },
-    handlePictureCardPreview(file) {
-      this.file.dialogImageUrl = file.url;
+    handlePicUploadSuccess:function(res,file){
+      temp.pic_link = URL.createObjectURL(file.raw);
     },
     handleDelete(row) {
       this.$notify({
