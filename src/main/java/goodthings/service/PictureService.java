@@ -8,9 +8,12 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,9 +31,10 @@ import java.util.Set;
 public class PictureService {
     @Autowired
     private PictureDao pictureDao;
-    private String address = "D:/image";
-
-    private static final long MAXSIZE = 1048576;
+    @Value("${upload.url}")
+    private String uploadUrl;
+    @Value("${upload.filepath}")
+    private String uploadPath;
 
     private static Set<String> formatSet = Sets.newHashSet();
 
@@ -51,42 +55,21 @@ public class PictureService {
         return format;
     }
 
-    private File createFile(int categoryId, String fileName) {
-        //目录结构 例如 D:/image/HUNAN/123.jpg
-        String category = GoodsCategory.getName(categoryId);
-        String relativePath = category + File.pathSeparator + fileName;
-        String fileFullName = FilenameUtils.concat(address, relativePath);
-        File file = new File(fileFullName);
-        if (!file.getParentFile().exists()) {
-            //创建多级目录
-            if (!file.getParentFile().mkdirs()) {
-                throw new RuntimeException("创建文件失败");
-            }
-        }
-        if (!file.exists()) {
-            try {
-                if (file.createNewFile()) {
-                    return file;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                throw new RuntimeException("创建文件失败");
-            }
-        }
-        return file;
-    }
-    public String uploadPicture(HttpServletRequest request,CommonsMultipartFile file, int categoryId) {
+    public String uploadPicture(MultipartFile file, int categoryId) {
         if(!file.isEmpty()){
             try {
                 // 文件保存路径
-                String category = GoodsCategory.getName(categoryId);
-                String filePath = request.getSession().getServletContext().getRealPath("/") + "upload/"+category;
+                String subDir = "upload/" + GoodsCategory.getName(categoryId);
+                String fullDir = FilenameUtils.concat(uploadPath, subDir);
+                FileUtils.forceMkdir(new File(fullDir));
                 String fileName = generateImageId()+getFormat(file.getOriginalFilename());
-                String fileFullName = FilenameUtils.concat(filePath, fileName);
+                String fileFullName = FilenameUtils.concat(fullDir, fileName);
                 // 转存文件
+                byte[] bytes = file.getBytes();
                 file.transferTo(new File(fileFullName));
-                pictureDao.insertPicture(categoryId, filePath, file.getBytes());
-                return filePath;
+                String httpPath = uploadUrl + subDir + "/" + fileName;
+                pictureDao.insertPicture(categoryId, httpPath, bytes);
+                return httpPath;
             } catch (Exception e) {
                 e.printStackTrace();
             }

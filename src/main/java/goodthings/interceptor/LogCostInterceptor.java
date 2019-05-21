@@ -74,7 +74,7 @@ public class LogCostInterceptor implements HandlerInterceptor {
             handler) throws Exception {
         long start = System.currentTimeMillis();
         String params = "";
-        if (RereadRequestFilter.METHOD_POST.equals(httpServletRequest.getMethod())) {
+        if (httpServletRequest instanceof WrappedHttpServletRequest) {
             WrappedHttpServletRequest requestWrapper = (WrappedHttpServletRequest) httpServletRequest;
             params = IOUtils.toString(requestWrapper.getBody(),httpServletRequest.getCharacterEncoding());
             if (params.length() > 1000) {

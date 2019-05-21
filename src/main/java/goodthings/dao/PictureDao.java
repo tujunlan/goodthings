@@ -10,7 +10,7 @@ public class PictureDao {
     private JdbcTemplate jdbcTemplate;
 
     public void insertPicture(int categoryId, String picLink, byte[] image) {
-        String sql = "insert into (category_id,pic_link,image) values(?,?,?)";
+        String sql = "insert into picture(category_id,pic_link,image) values(?,?,?)";
         jdbcTemplate.update(sql, categoryId, picLink, image);
     }
 }

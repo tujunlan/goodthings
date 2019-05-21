@@ -1,7 +1,0 @@
-server:
-  port: 8011
-rmq:
-  nameServer : ry4-main-rocketmq-nameserver1.hl:9876;ry4-main-rocketmq-nameserver2.hl:9876;
-  topic : Reidx4Api_UserData
-swagger:
-  enable : false
