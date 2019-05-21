@@ -11,6 +11,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -42,13 +43,7 @@ public class PictureService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         return sdf.format(new Date()) + new Random().nextInt(899) + 100;//随机生成100到900之间的数
     }
-    private String getFormat(FileItem item) {
-        long size = item.getSize();
-        //设定上传的最大值1MB, 1024*1024
-        if(size > MAXSIZE) {
-            throw new RuntimeException("图片过大, 请使用小于1MB的图片上传");
-        }
-        String fileName = item.getName();
+    private String getFormat(String fileName) {
         String format =  fileName.substring(fileName.lastIndexOf("."));
         if(!formatSet.contains(format)) {
             throw new RuntimeException("请使用格式为.jpg或.png的图片");
@@ -80,47 +75,22 @@ public class PictureService {
         }
         return file;
     }
-    public List<String> uploadPicture(HttpServletRequest request,int categoryId) {
-        List<String> uploadPath = Lists.newArrayList();
-        DiskFileItemFactory factory = new DiskFileItemFactory();
-        ServletFileUpload upload = new ServletFileUpload(factory);
-        upload.setHeaderEncoding("UTF-8");
-        InputStream inputStream = null;
-        FileOutputStream fileOutputStream = null;
-        try {
-            List<FileItem> list = upload.parseRequest(request);
-            for(FileItem item : list) {
-                if(!item.isFormField()) {
-                    String suffix = getFormat(item);
-                    inputStream = item.getInputStream();
-                    byte[] buffer = new byte[1024];
-                    File file = createFile(categoryId, generateImageId() + suffix);
-                    fileOutputStream = new FileOutputStream(file);
-                    int len = 0;
-                    while((len = inputStream.read(buffer)) > 0) {
-                        fileOutputStream.write(buffer, 0, len);
-                    }
-                    String filePath = file.getPath().replace(address, "");
-                    pictureDao.insertPicture(categoryId, filePath, item.get());
-                    uploadPath.add(filePath);
-                }
-            }
-        } catch (FileUploadException | IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("服务器繁忙请稍后在试");
-        } finally {
-            if(inputStream != null) {
-                try {
-                    inputStream.close();
-                    if(fileOutputStream != null) {
-                        fileOutputStream.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+    public String uploadPicture(HttpServletRequest request,CommonsMultipartFile file, int categoryId) {
+        if(!file.isEmpty()){
+            try {
+                // 文件保存路径
+                String category = GoodsCategory.getName(categoryId);
+                String filePath = request.getSession().getServletContext().getRealPath("/") + "upload/"+category;
+                String fileName = generateImageId()+getFormat(file.getOriginalFilename());
+                String fileFullName = FilenameUtils.concat(filePath, fileName);
+                // 转存文件
+                file.transferTo(new File(fileFullName));
+                pictureDao.insertPicture(categoryId, filePath, file.getBytes());
+                return filePath;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-        return uploadPath;
+        return null;
     }
 }

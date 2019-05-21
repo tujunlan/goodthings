@@ -32,8 +32,8 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
-    path: '/token',
-    component: () => import('@/views/token/index'),
+    path: '/login',
+    component: () => import('@/views/login/index'),
     hidden: true
   },
 
@@ -113,7 +113,7 @@ export const constantRoutes = [
     ]
   },
 
-  /*{
+  /* {
     path: '/nested',
     component: Layout,
     redirect: '/nested/menu1',

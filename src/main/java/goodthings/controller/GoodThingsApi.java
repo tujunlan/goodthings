@@ -8,6 +8,7 @@ import goodthings.service.PictureService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotEmpty;
@@ -60,8 +62,8 @@ public class GoodThingsApi{
 
     @ApiOperation(value = "按标签查书", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "tag_ids", value = "标签ids,多个用逗号分隔", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "user_id", value = "用户id",  dataType = "Integer"),
+            @ApiImplicitParam(name = "tag_ids", value = "标签ids,多个用逗号分隔", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "user_id", value = "用户id", dataType = "int"),
             @ApiImplicitParam(name = "page", value = "页码", required = true, dataType = "int"),
             @ApiImplicitParam(name = "limit", value = "页内数量", required = true, dataType = "int")})
     @RequestMapping(value = "tags_books", method = RequestMethod.POST)
@@ -122,13 +124,13 @@ public class GoodThingsApi{
 
     @ApiOperation(value = "创建书", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "category_id", value = "书名", required = true,  dataType = "int")})
+            @ApiImplicitParam(name = "category_id", value = "书名", required = true, dataType = "int")})
     @RequestMapping(value = "upload_image", method = RequestMethod.POST)
-    public String upload_image(HttpServletRequest request, int category_id){
+    public String upload_image(HttpServletRequest request, @ApiParam(value = "图片", required = true)CommonsMultipartFile file, int category_id) {
         try {
-            List<String> uploadPth = pictureService.uploadPicture(request, category_id);
-            if(!uploadPth.isEmpty()){
-                return new ControllerResult(20000, uploadPth.get(0)).toJsonString();
+            String uploadPth = pictureService.uploadPicture(request,file, category_id);
+            if (uploadPth != null) {
+                return new ControllerResult(20000, uploadPth).toJsonString();
             }
         } catch (Exception e) {
             e.printStackTrace();

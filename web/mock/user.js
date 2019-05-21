@@ -24,9 +24,9 @@ const users = {
 }
 
 export default [
-  // user token
+  // user login
   {
-    url: '/user/token',
+    url: '/user/login',
     type: 'post',
     response: config => {
       const { username } = config.body

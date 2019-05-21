@@ -6,7 +6,7 @@ const state = {
   token: getToken(),
   name: '',
   avatar: '',
-  uid:''
+  uid: ''
 }
 
 const mutations = {
@@ -25,7 +25,7 @@ const mutations = {
 }
 
 const actions = {
-  // user token
+  // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
@@ -50,7 +50,7 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar,uid } = data
+        const { name, avatar, uid } = data
 
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
