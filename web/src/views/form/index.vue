@@ -37,7 +37,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="Activity form">
-        <el-input v-model="form.desc" type="textarea" />
+        <el-input v-model="form.description" type="textarea" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Create</el-button>
@@ -59,7 +59,7 @@ export default {
         delivery: false,
         type: [],
         resource: '',
-        desc: ''
+        description: ''
       }
     }
   },

@@ -16,7 +16,7 @@ public class BookRowMapper implements RowMapper<Book> {
         book.setPic_link(resultSet.getString("pic_link"));
         book.setAuthor(resultSet.getString("author"));
         book.setPress(resultSet.getString("press"));
-        book.setDesc(resultSet.getString("desc"));
+        book.setDescription(resultSet.getString("description"));
         book.setIsdel(resultSet.getInt("isdel"));
         book.setAdd_time(resultSet.getString("add_time").substring(0,19));
         try {

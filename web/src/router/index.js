@@ -67,35 +67,23 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/书单维护',
+    path: '/admin',
     component: Layout,
+    redirect: '/example/table',
+    name: '后台维护',
+    meta: { title: '后台维护', icon: 'example' },
     children: [
       {
         path: 'complex-table',
         name: 'BookManager',
-        component: () => import('@/views/book/complex-table'),
+        component: () => import('@/views/admin/book-manager'),
         meta: { title: '书单维护', icon: 'form' }
-      }
-    ]
-  },
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'tag',
+        name: 'Tag',
+        component: () => import('@/views/admin/tag-manager'),
+        meta: { title: '标签维护', icon: 'tree' }
       }
     ]
   },

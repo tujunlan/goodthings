@@ -51,7 +51,7 @@
       </el-table-column>
       <el-table-column label="简单描述" width="80px">
         <template slot-scope="scope">
-          <span>{{ scope.row.desc }}</span>
+          <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
@@ -59,7 +59,7 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button  size="mini" type="danger" @click="handleModifyStatus(row,'deleted')">
+          <el-button  size="mini" type="danger" @click="handleDelete(row)">
             删除
           </el-button>
         </template>
@@ -73,8 +73,8 @@
         <el-form-item label="图片" prop="pic_link">
           <el-upload
             ref="imgUpload"
-            :auto-upload="false"
-            action="/goods/upload_image"
+            action="/dev-api/goods/upload_image"
+            :show-file-list="false"
             :data="{category_id:1}"
             :before-upload="handleBeforeUpload"
             :on-success="handlePicUploadSuccess">
@@ -95,7 +95,7 @@
           <el-input v-model="temp.out_link" />
         </el-form-item>
         <el-form-item label="简介">
-          <el-input v-model="temp.desc" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
+          <el-input v-model="temp.description" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -136,7 +136,7 @@
   }
 </style>
 <script>
-import { getAllBooks, createBook, updateBook } from '@/api/book'
+import { getAllBooks, createBook, updateBook, deleteBook } from '@/api/book'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -161,12 +161,12 @@ export default {
       },
       temp: {
         id: undefined,
-        pic_link:'',
+        pic_link: '',
         book_name: '',
         author: 1,
         press: '',
         out_link: '',
-        desc: ''
+        description: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -175,8 +175,9 @@ export default {
         create: '添加'
       },
       rules: {
-        title: [{ required: true, message: 'title is required', trigger: 'blur' }],
-        type: [{ required: true, message: 'type is required', trigger: 'change' }]
+        book_name: [{ required: true, message: 'book_name is required', trigger: 'blur' }],
+        author: [{ required: true, message: 'author is required', trigger: 'change' }],
+        press: [{ required: true, message: 'author is required', trigger: 'change' }]
       },
       downloadLoading: false
     }
@@ -204,11 +205,38 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        book_name: 1,
+        book_name: '',
         author: '',
         press: '',
         out_link: '',
-        desc: ''
+        pic_link: '',
+        description: ''
+      }
+    },
+    handleBeforeUpload(file) {
+      if (!(file.type === 'image/png' || file.type === 'image/jpg' || file.type === 'image/jpeg')) {
+        this.$notify.warning({
+          title: '警告',
+          message: '请上传格式为image/png, image/jpg的图片'
+        })
+      }
+      const size = file.size / 1024 / 1024
+      if (size > 1) {
+        this.$notify.warning({
+          title: '警告',
+          message: '图片大小必须小于1M'
+        })
+      }
+    },
+    handlePicUploadSuccess: function(res, file) {
+      if (res.code === 20000) {
+        this.temp.pic_link = res.data
+      } else {
+        this.temp.pic_link = ''
+        this.$notify.error({
+          title: '失败',
+          message: '图片上传失败'
+        })
       }
     },
     handleCreate() {
@@ -222,19 +250,24 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.$refs.imgUpload.submit();
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createBook(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
+          if (this.temp.pic_link) {
+            createBook(this.temp).then(response => {
+              this.temp.id = response.data
+              this.list.unshift(this.temp)
+              this.dialogFormVisible = false
+              this.$notify({
+                title: '成功',
+                message: '创建成功',
+                type: 'success',
+                duration: 2000
+              })
             })
-          })
+          } else {
+            this.$notify.error({
+              title: '图片缺失',
+              message: '请上传图片'
+            })
+          }
         }
       })
     },
@@ -269,30 +302,15 @@ export default {
         }
       })
     },
-    handleBeforeUpload (file) {
-      if(!(file.type === 'image/png' || file.type === 'image/jpg')) {
-        this.$notify.warning({
-          title: '警告',
-          message: '请上传格式为image/png, image/jpg的图片'
-        })
-      }
-      let size = file.size / 1024 / 1024
-      if(size > 1) {
-        this.$notify.warning({
-          title: '警告',
-          message: '图片大小必须小于1M'
-        })
-      }
-    },
-    handlePicUploadSuccess:function(res,file){
-      temp.pic_link = URL.createObjectURL(file.raw);
-    },
+
     handleDelete(row) {
-      this.$notify({
-        title: '成功',
-        message: '删除成功',
-        type: 'success',
-        duration: 2000
+      deleteBook(row).then(() => {
+        this.$notify({
+          title: '成功',
+          message: '删除成功',
+          type: 'success',
+          duration: 2000
+        })
       })
       const index = this.list.indexOf(row)
       this.list.splice(index, 1)

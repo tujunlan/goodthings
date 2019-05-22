@@ -7,7 +7,7 @@ public class Book {
     private String pic_link;
     private String author;
     private String press;
-    private String desc;
+    private String description;
     private int isdel;
     private String add_time;
     private int owner_num;
@@ -69,12 +69,12 @@ public class Book {
         this.press = press;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getIsdel() {

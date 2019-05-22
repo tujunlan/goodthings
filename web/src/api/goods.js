@@ -14,3 +14,16 @@ export function getChildTags(params) {
     params: params
   })
 }
+export function getCategory() {
+  return request({
+    url: '/goods/category',
+    method: 'post'
+  })
+}
+export function deleteChildTag(params) {
+  return request({
+    url: '/goods/delete_tag',
+    method: 'post',
+    params: params
+  })
+}
