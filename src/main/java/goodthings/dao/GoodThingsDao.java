@@ -48,7 +48,7 @@ public class GoodThingsDao {
         return ids;
     }
 
-    public long addChildTag(int ptagId, String tagName, int categoryId) {
+    public int addChildTag(int ptagId, String tagName, int categoryId) {
         String sql = "insert into tag(tag_name,category_id,p_tag_id) values(?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
@@ -63,7 +63,7 @@ public class GoodThingsDao {
                 return ps;
             }
         }, keyHolder);
-        return (long)keyHolder.getKey();
+        return keyHolder.getKey().intValue();
     }
 
     public void deleteTag(int tagId) {

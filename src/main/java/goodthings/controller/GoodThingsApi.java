@@ -72,8 +72,8 @@ public class GoodThingsApi{
             @ApiImplicitParam(name = "tag_name", value = "tag_name", required = true, dataType = "string")})
     @RequestMapping(value = "create_tag", method = RequestMethod.POST)
     public String createTag(int ptag_id,String tag_name,int category_id) {
-        goodThingsDao.addChildTag(ptag_id, tag_name, category_id);
-        return new ControllerResult(20000, "success").toJsonString();
+        int newTagId = goodThingsDao.addChildTag(ptag_id, tag_name, category_id);
+        return new ControllerResult(20000, newTagId).toJsonString();
     }
     @ApiOperation(value = "上传图片", notes = "")
     @ApiImplicitParams({

@@ -100,10 +100,14 @@
 
     },
     categoryChange(item) {
-      this.category = item.value;
+      this.category = item;
     },
     ptagChange(item) {
-      this.ptag = item.value;
+      this.ptag = item;
+      this.ctagQuery.p_tag_id = this.ptag
+      getChildTags(this.ctagQuery).then(response => {
+        this.ctaglist = response.data.items
+      })
     },
     handleClose(tag) {
       this.ctagDelParam.tag_id = tag.id
@@ -126,7 +130,7 @@
         this.ctagParam.tag_name = this.inputValue
         this.ctagParam.category_id = this.category
         addChildTag(this.ctagParam).then(response => {
-          this.ctaglist.push({id:response.data, name: this.inputValue})
+          this.ctaglist.push({id:response.data, name: inputValue})
         })
       }
       this.inputVisible = false
