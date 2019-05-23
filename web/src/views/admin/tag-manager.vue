@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
-    <div>
+    <div style="margin-bottom:10px; ">
       <el-radio-group v-model="category" @change="categoryChange">
         <el-radio-button :label="item.id" v-for="item in categorylist">{{item.name}}</el-radio-button>
       </el-radio-group>
     </div>
-    <div>
+    <div style="margin-bottom:10px; ">
       <el-radio-group v-model="ptag" @change="ptagChange">
         <el-radio-button :label="item.id" v-for="item in ptaglist">{{item.name}}</el-radio-button>
       </el-radio-group>
@@ -51,22 +51,32 @@
   }
 </style>
 <script>
-  import {getCategory,getParentTags,getChildTags,deleteChildTag} from '@/api/goods'
+  import {getCategory,getParentTags,getChildTags,deleteChildTag,addChildTag} from '@/api/goods'
 
   export default {
   data() {
     return {
-      category: 1,
+      category: null,
       categorylist: null,
       ptag: null,
       ptagQuery: {
-        category_id: this.category
+        category_id: null
       },
       ptaglist: null,
       ctagQuery: {
-        p_tag_id: this.ptag
+        p_tag_id: null
       },
-      ctaglist: null
+      ctaglist: null,
+      ctagParam: {
+        ptag_id: null,
+        tag_name: null,
+        category_id: null
+      },
+      ctagDelParam: {
+        tag_id: null
+      },
+      inputVisible: false,
+      inputValue: null
     };
   },
   created() {
@@ -76,21 +86,30 @@
     fetchData() {
       getCategory().then(response => {
         this.categorylist = response.data.items
-      })
-      getParentTags(this.ptagQuery).then(response => {
-        this.ptaglist = response.data.items
-        this.ptag = this.ptaglist[0].id
-        getChildTags(this.ctagQuery).then(response => {
-          this.ctaglist = response.data.items
+        this.category = this.categorylist[0].id
+        this.ptagQuery.category_id = this.category
+        getParentTags(this.ptagQuery).then(response => {
+          this.ptaglist = response.data.items
+          this.ptag = this.ptaglist[0].id
+          this.ctagQuery.p_tag_id = this.ptag
+          getChildTags(this.ctagQuery).then(response => {
+            this.ctaglist = response.data.items
+          })
         })
       })
+
     },
     categoryChange(item) {
       this.category = item.value;
     },
+    ptagChange(item) {
+      this.ptag = item.value;
+    },
     handleClose(tag) {
-      deleteChildTag(tag.id)
-      this.ctaglist.splice(this.ctaglist.indexOf(tag), 1)
+      this.ctagDelParam.tag_id = tag.id
+      deleteChildTag(this.ctagDelParam).then(response => {
+        this.ctaglist.splice(this.ctaglist.indexOf(tag), 1)
+      })
     },
 
     showInput() {
@@ -103,7 +122,12 @@
     handleInputConfirm() {
       let inputValue = this.inputValue
       if (inputValue) {
-        this.dynamicTags.push(inputValue)
+        this.ctagParam.ptag_id = this.ptag
+        this.ctagParam.tag_name = this.inputValue
+        this.ctagParam.category_id = this.category
+        addChildTag(this.ctagParam).then(response => {
+          this.ctaglist.push({id:response.data, name: this.inputValue})
+        })
       }
       this.inputVisible = false
       this.inputValue = ''

@@ -27,3 +27,10 @@ export function deleteChildTag(params) {
     params: params
   })
 }
+export function addChildTag(params) {
+  return request({
+    url: '/goods/create_tag',
+    method: 'post',
+    params: params
+  })
+}
