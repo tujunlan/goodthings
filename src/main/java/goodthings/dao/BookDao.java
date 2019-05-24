@@ -89,7 +89,7 @@ public class BookDao {
         String sql = "update book as a set a.book_name=?,a.out_link=?,a.author=?,a.description=?,a.press=?,a.pic_link=? where a.id=?";
         jdbcTemplate.update(sql, new Object[]{book_name, out_link, author, description, press, pic_link, book_id});
     }
-    public long insertBookInfo(String book_name, String out_link,String pic_link, String author, String press, String description) {
+    public int insertBookInfo(String book_name, String out_link,String pic_link, String author, String press, String description) {
         String sql = "insert into book (book_name,out_link,pic_link,author,press,description) values(?,?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
@@ -107,9 +107,20 @@ public class BookDao {
                 return ps;
             }
         }, keyHolder);
-        return (long)keyHolder.getKey();
+        return keyHolder.getKey().intValue();
     }
 
+    @Transactional
+    public void insertBookTag(int book_id, int ptag_id, String ctag_ids) {
+        String delSql = "delete from goods_tag where goods_id=? and category_id=" + GoodsCategory.book.value();
+        jdbcTemplate.update(delSql, book_id);
+        String sql = "insert into goods_tag(goods_id,category_id,tag_id) values(?,?,?)";
+        jdbcTemplate.update(sql, book_id, GoodsCategory.book.value(), ptag_id);
+        List<String> ctagIds = Splitter.on(",").splitToList(ctag_ids);
+        for (String id : ctagIds) {
+            jdbcTemplate.update(sql, book_id, GoodsCategory.book.value(), id);
+        }
+    }
     public void deleteBook(String ids) {
         String goodsSql = "update book set isdel=1 where id =" + ids;
         jdbcTemplate.update(goodsSql);

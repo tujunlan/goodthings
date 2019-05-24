@@ -70,6 +70,18 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="标签">
+          <div style="margin-bottom:10px; ">
+            <el-radio-group v-model="temp.ptag" @change="ptagChange">
+              <el-radio-button :label="item.id" v-for="item in ptaglist">{{item.name}}</el-radio-button>
+            </el-radio-group>
+          </div>
+          <div>
+            <el-checkbox-group v-model="temp.ctags" size="medium">
+              <el-checkbox-button v-for="tag in ctaglist" :label="tag.id" :key="tag.id">{{tag.name}}</el-checkbox-button>
+            </el-checkbox-group>
+          </div>
+        </el-form-item>
         <el-form-item label="图片" prop="pic_link">
           <el-upload
             ref="imgUpload"
@@ -137,6 +149,7 @@
 </style>
 <script>
 import { getAllBooks, createBook, updateBook, deleteBook } from '@/api/book'
+import {getParentTags,getChildTags} from '@/api/goods'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -159,6 +172,14 @@ export default {
         book_name: undefined,
         type: undefined
       },
+      ptagQuery: {
+        category_id: 1
+      },
+      ptaglist: null,
+      ctagQuery: {
+        p_tag_id: null
+      },
+      ctaglist: null,
       temp: {
         id: undefined,
         pic_link: '',
@@ -166,7 +187,9 @@ export default {
         author: 1,
         press: '',
         out_link: '',
-        description: ''
+        description: '',
+        ptag: '',
+        ctags: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -184,6 +207,7 @@ export default {
   },
   created() {
     this.getList()
+    this.fetchTag()
   },
   methods: {
     getList() {
@@ -191,11 +215,22 @@ export default {
       getAllBooks(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
-
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
+      })
+    },
+    fetchTag(){
+      getParentTags(this.ptagQuery).then(response => {
+        this.ptaglist = response.data.items
+      })
+    },
+    ptagChange(item) {
+      this.temp.ctags = ''
+      this.ctagQuery.p_tag_id = this.temp.ptag
+      getChildTags(this.ctagQuery).then(response => {
+        this.ctaglist = response.data.items
       })
     },
     handleFilter() {
@@ -210,7 +245,9 @@ export default {
         press: '',
         out_link: '',
         pic_link: '',
-        description: ''
+        description: '',
+        ptag: '',
+        ctags: ''
       }
     },
     handleBeforeUpload(file) {
@@ -250,7 +287,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          if (this.temp.pic_link) {
+          if (this.temp.pic_link && this.temp.ptag) {
             createBook(this.temp).then(response => {
               this.temp.id = response.data
               this.list.unshift(this.temp)
@@ -281,7 +318,7 @@ export default {
     },
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
+        if (valid && this.temp.ptag) {
           const tempData = Object.assign({}, this.temp)
           updateBook(tempData).then(() => {
             for (const v of this.list) {

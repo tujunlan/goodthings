@@ -87,10 +87,13 @@ public class BookApi {
             @ApiImplicitParam(name = "out_link", value = "外链", required = true, dataType = "String"),
             @ApiImplicitParam(name = "author", value = "作者", required = true, dataType = "String"),
             @ApiImplicitParam(name = "press", value = "出版社", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "description", value = "简介", required = true, dataType = "String")})
+            @ApiImplicitParam(name = "description", value = "简介", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "ptag", value = "简介", required = true, dataType = "int"),
+            @ApiImplicitParam(name = "ctags", value = "简介", required = true, dataType = "String")})
     @RequestMapping(value = "update_book_info", method = RequestMethod.POST)
-    public String updateBookInfo(int id, String book_name, String pic_link, String author, String press, String out_link, String description) {
+    public String updateBookInfo(int id, String book_name, String pic_link, String author, String press, String out_link, String description,int ptag,String ctags) {
         bookDao.updateBookInfo(id, book_name, out_link, author, press, description, pic_link);
+        bookDao.insertBookTag(id, ptag, ctags);
         return new ControllerResult(20000, "success").toJsonString();
     }
 
@@ -101,10 +104,14 @@ public class BookApi {
             @ApiImplicitParam(name = "out_link", value = "外链", required = true, dataType = "String"),
             @ApiImplicitParam(name = "author", value = "作者", required = true, dataType = "String"),
             @ApiImplicitParam(name = "press", value = "出版社", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "description", value = "简介", required = true, dataType = "String")})
+            @ApiImplicitParam(name = "description", value = "简介", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "ptag", value = "简介", required = true, dataType = "int"),
+            @ApiImplicitParam(name = "ctags", value = "简介", required = true, dataType = "String")
+    })
     @RequestMapping(value = "create_book_info", method = RequestMethod.POST)
-    public String createBookInfo(String book_name, String pic_link, String out_link, String author, String press, String description) {
-        long id = bookDao.insertBookInfo(book_name, out_link, pic_link, author, press, description);
+    public String createBookInfo(String book_name, String pic_link, String out_link, String author, String press, String description,int ptag,String ctags) {
+        int id = bookDao.insertBookInfo(book_name, out_link, pic_link, author, press, description);
+        bookDao.insertBookTag(id, ptag, ctags);
         return new ControllerResult(20000, id).toJsonString();
     }
 
