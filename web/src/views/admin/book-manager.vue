@@ -77,7 +77,7 @@
             </el-radio-group>
           </div>
           <div>
-            <el-checkbox-group v-model="temp.ctags" size="medium">
+            <el-checkbox-group v-model="temp.ctags" size="medium" @change="ctagChange">
               <el-checkbox-button v-for="tag in ctaglist" :label="tag.id" :key="tag.id">{{tag.name}}</el-checkbox-button>
             </el-checkbox-group>
           </div>
@@ -149,7 +149,7 @@
 </style>
 <script>
 import { getAllBooks, createBook, updateBook, deleteBook } from '@/api/book'
-import {getParentTags,getChildTags} from '@/api/goods'
+import {getParentTags,getChildTags,getGoodsTag} from '@/api/goods'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -189,7 +189,7 @@ export default {
         out_link: '',
         description: '',
         ptag: '',
-        ctags: ''
+        ctags: []
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -227,11 +227,14 @@ export default {
       })
     },
     ptagChange(item) {
-      this.temp.ctags = ''
+      this.temp.ctags = []
       this.ctagQuery.p_tag_id = this.temp.ptag
       getChildTags(this.ctagQuery).then(response => {
         this.ctaglist = response.data.items
       })
+    },
+    ctagChange(items){
+      this.temp.ctags = items
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -247,7 +250,7 @@ export default {
         pic_link: '',
         description: '',
         ptag: '',
-        ctags: ''
+        ctags: []
       }
     },
     handleBeforeUpload(file) {
@@ -310,6 +313,10 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
+      getGoodsTag({category_id:1,goods_id:row.id}).then(response => {
+        this.temp.ptag = response.data.ptag
+        this.temp.ctags = response.data.ctags
+      })
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {

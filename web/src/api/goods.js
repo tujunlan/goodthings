@@ -34,3 +34,10 @@ export function addChildTag(params) {
     params: params
   })
 }
+export function getGoodsTag(params) {
+  return request({
+    url: '/goods/get_goods_tag',
+    method: 'post',
+    params: params
+  })
+}

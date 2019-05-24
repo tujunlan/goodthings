@@ -2,6 +2,8 @@ package goodthings.dao;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import goodthings.bean.Book;
 import goodthings.bean.GoodsCategory;
 import goodthings.bean.StringPair;
@@ -9,19 +11,20 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class GoodThingsDao {
@@ -36,7 +39,32 @@ public class GoodThingsDao {
         String sql = "select tag_id,tag_name from tag where isdel=0 and p_tag_id=0 and category_id=" + categoryId;
         return StringPair.transform(jdbcTemplate.queryForList(sql));
     }
-
+    public Map<Integer,List<StringPair>> getAllChildTags(int categoryId) {
+        String sql = "select tag_id,tag_name,p_tag_id from tag where isdel=0 and p_tag_id<>0 and category_id=? order by p_tag_id,tag_order";
+        Map<Integer, List<StringPair>> ret = Maps.newHashMap();
+        jdbcTemplate.query(sql, new Object[]{categoryId}, new ResultSetExtractor<List<StringPair>>() {
+            @Override
+            public List<StringPair> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+                int temp = 0;
+                while (resultSet.next()) {
+                    StringPair sp = new StringPair();
+                    sp.setId(resultSet.getInt("tag_id"));
+                    sp.setName(resultSet.getString("tag_name"));
+                    int ptagId = resultSet.getInt("p_tag_id");
+                    if (ptagId != temp) {
+                        List<StringPair> samePtag = Lists.newArrayList();
+                        samePtag.add(sp);
+                        ret.put(ptagId, samePtag);
+                        temp = ptagId;
+                    }else {
+                        ret.get(temp).add(sp);
+                    }
+                }
+                return null;
+            }
+        });
+        return ret;
+    }
     public List<StringPair> getTagsByParent(int ptagId) {
         String sql = "select tag_id,tag_name from tag where isdel=0 and p_tag_id=" + ptagId;
         return StringPair.transform(jdbcTemplate.queryForList(sql));
@@ -69,5 +97,14 @@ public class GoodThingsDao {
     public void deleteTag(int tagId) {
         String sql = "update tag set isdel=1 where tag_id=?";
         jdbcTemplate.update(sql, tagId);
+    }
+
+    public int getGoodsParentTag(int categoryId, int goodsId) {
+        String sql = "select a.tag_id from goods_tag as a join tag as b on a.tag_id=b.tag_id and b.p_tag_id=0 and a.category_id=? and a.goods_id=?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{categoryId, goodsId}, Integer.class);
+    }
+    public List<Integer> getGoodsChildTag(int categoryId, int goodsId) {
+        String sql = "select a.tag_id from goods_tag as a join tag as b on a.tag_id=b.tag_id and b.p_tag_id<>0 and a.category_id=? and a.goods_id=?";
+        return jdbcTemplate.queryForList(sql, new Object[]{categoryId, goodsId}, Integer.class);
     }
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class StringPair {
-    private String id;
+    private int id;
     private String name;
 
     public static List<StringPair> transform(List<Map<String, Object>> list) {
@@ -18,7 +18,7 @@ public class StringPair {
             StringPair sp=new StringPair();
             for(String k:map.keySet()){
                 if (k.indexOf("id") != -1) {
-                    sp.id = map.get(k).toString();
+                    sp.id = (Integer) map.get(k);
                 }else {
                     sp.name = map.get(k).toString();
                 }
@@ -27,11 +27,11 @@ public class StringPair {
         }
         return ret;
     }
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

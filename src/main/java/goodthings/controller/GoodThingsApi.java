@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tujl on 2018/12/14.
@@ -47,6 +48,15 @@ public class GoodThingsApi{
         JSONObject jb = new JSONObject();
         jb.put("items", defaultTags);
         return new ControllerResult(20000, jb).toJsonString();
+    }
+
+    @ApiOperation(value = "获取所有子标签", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "category_id", value = "物品种类id", required = true, dataType = "int")})
+    @RequestMapping(value = "all_children_tags", method = RequestMethod.POST)
+    public String getAllChildrenTags(int category_id) {
+        Map<Integer,List<StringPair>> childrenTags = goodThingsDao.getAllChildTags(category_id);
+        return new ControllerResult(20000, childrenTags).toJsonString();
     }
 
     @ApiOperation(value = "获取子标签", notes = "")
@@ -93,5 +103,18 @@ public class GoodThingsApi{
         return new ControllerResult(50000, "图片上传失败").toJsonString();
     }
 
-
+    @ApiOperation(value = "获取物品的标签", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "goods_id", value = "goods_id", required = true, dataType = "int"),
+            @ApiImplicitParam(name = "category_id", value = "category_id", required = true, dataType = "int")
+    })
+    @RequestMapping(value = "get_goods_tag", method = RequestMethod.POST)
+    public String getGoodsTags(int category_id,int goods_id) {
+        int ptagId = goodThingsDao.getGoodsParentTag(category_id, goods_id);
+        List<Integer> cagId = goodThingsDao.getGoodsChildTag(category_id, goods_id);
+        JSONObject jb = new JSONObject();
+        jb.put("ptag", ptagId);
+        jb.put("ctags", cagId);
+        return new ControllerResult(20000, jb).toJsonString();
+    }
 }
