@@ -41,3 +41,10 @@ export function getGoodsTag(params) {
     params: params
   })
 }
+export function getAllTags(params) {
+  return request({
+    url: '/goods/all_children_tags',
+    method: 'post',
+    params: params
+  })
+}

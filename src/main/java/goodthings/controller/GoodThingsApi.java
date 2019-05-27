@@ -56,7 +56,8 @@ public class GoodThingsApi{
     @RequestMapping(value = "all_children_tags", method = RequestMethod.POST)
     public String getAllChildrenTags(int category_id) {
         Map<Integer,List<StringPair>> childrenTags = goodThingsDao.getAllChildTags(category_id);
-        return new ControllerResult(20000, childrenTags).toJsonString();
+        String ret = new ControllerResult(20000, childrenTags).toJsonString();
+        return new ControllerResult(20000, "suc").toJsonString();
     }
 
     @ApiOperation(value = "获取子标签", notes = "")

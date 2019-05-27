@@ -149,7 +149,7 @@
 </style>
 <script>
 import { getAllBooks, createBook, updateBook, deleteBook } from '@/api/book'
-import {getParentTags,getChildTags,getGoodsTag} from '@/api/goods'
+import {getAllTags,getParentTags,getGoodsTag} from '@/api/goods'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -176,9 +176,8 @@ export default {
         category_id: 1
       },
       ptaglist: null,
-      ctagQuery: {
-        p_tag_id: null
-      },
+      ptag2ctaglist: null,
+      p_tag_id: null,
       ctaglist: null,
       temp: {
         id: undefined,
@@ -206,7 +205,7 @@ export default {
     }
   },
   created() {
-    this.getList()
+    // this.getList()
     this.fetchTag()
   },
   methods: {
@@ -222,16 +221,16 @@ export default {
       })
     },
     fetchTag(){
-      getParentTags(this.ptagQuery).then(response => {
-        this.ptaglist = response.data.items
+      getAllTags(this.ptagQuery).then(response => {
+        this.ptag2ctaglist = response.data
       })
+/*      getParentTags(this.ptagQuery).then(response => {
+        this.ptaglist = response.data.items
+      })*/
     },
     ptagChange(item) {
-      this.temp.ctags = []
-      this.ctagQuery.p_tag_id = this.temp.ptag
-      getChildTags(this.ctagQuery).then(response => {
-        this.ctaglist = response.data.items
-      })
+      this.p_tag_id = this.temp.ptag
+      this.ctaglist = this.ptag2ctaglist[this.temp.ptag]
     },
     ctagChange(items){
       this.temp.ctags = items
