@@ -116,7 +116,7 @@ public class BookDao {
         jdbcTemplate.update(delSql, book_id);
         String sql = "insert into goods_tag(goods_id,category_id,tag_id) values(?,?,?)";
         jdbcTemplate.update(sql, book_id, GoodsCategory.book.value(), ptag_id);
-        List<String> ctagIds = Splitter.on(",").splitToList(ctag_ids);
+        List<String> ctagIds = Splitter.on(",").omitEmptyStrings().splitToList(ctag_ids);
         for (String id : ctagIds) {
             jdbcTemplate.update(sql, book_id, GoodsCategory.book.value(), id);
         }

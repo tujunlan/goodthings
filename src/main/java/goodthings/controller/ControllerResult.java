@@ -1,5 +1,6 @@
 package goodthings.controller;
 
+
 import com.alibaba.fastjson.JSONObject;
 
 public class ControllerResult {
@@ -21,7 +22,7 @@ public class ControllerResult {
         this.code = code;
     }
     public String toJsonString(){
-        return JSONObject.toJSONString(this);
+        return JSONObject.toJSONString(JSONObject.toJSON(this));
     }
 
     public int getCode() {

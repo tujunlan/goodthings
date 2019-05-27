@@ -56,10 +56,10 @@
         <level value="DEBUG" />
         <appender-ref ref="STDOUT" />
     </logger>
-    <logger name="java.sql.PreparedStatement" additivity="true">
+<!--    <logger name="java.sql.PreparedStatement" additivity="true">
         <level value="DEBUG" />
         <appender-ref ref="STDOUT" />
-    </logger>
+    </logger>-->
     <!--logger name="java.sql.ResultSet" additivity="true">
         <level value="DEBUG" />
         <appender-ref ref="STDOUT" />

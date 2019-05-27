@@ -77,8 +77,8 @@
             </el-radio-group>
           </div>
           <div>
-            <el-checkbox-group v-model="temp.ctags" size="medium" @change="ctagChange">
-              <el-checkbox-button v-for="tag in ctaglist" :label="tag.id" :key="tag.id">{{tag.name}}</el-checkbox-button>
+            <el-checkbox-group v-model="temp.ctags">
+              <el-checkbox-button v-for="item in ctaglist" :label="item.id" :key="item.id">{{item.name}}</el-checkbox-button>
             </el-checkbox-group>
           </div>
         </el-form-item>
@@ -149,7 +149,7 @@
 </style>
 <script>
 import { getAllBooks, createBook, updateBook, deleteBook } from '@/api/book'
-import {getAllTags,getParentTags,getGoodsTag} from '@/api/goods'
+import {getParentTags,getAllTags,getGoodsTag} from '@/api/goods'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -162,6 +162,7 @@ export default {
   },
   data() {
     return {
+      checked: false ,
       tableKey: 0,
       list: null,
       total: 0,
@@ -177,7 +178,6 @@ export default {
       },
       ptaglist: null,
       ptag2ctaglist: null,
-      p_tag_id: null,
       ctaglist: null,
       temp: {
         id: undefined,
@@ -205,7 +205,7 @@ export default {
     }
   },
   created() {
-    // this.getList()
+    this.getList()
     this.fetchTag()
   },
   methods: {
@@ -221,19 +221,15 @@ export default {
       })
     },
     fetchTag(){
+      getParentTags(this.ptagQuery).then(response => {
+        this.ptaglist = response.data.items
+      })
       getAllTags(this.ptagQuery).then(response => {
         this.ptag2ctaglist = response.data
       })
-/*      getParentTags(this.ptagQuery).then(response => {
-        this.ptaglist = response.data.items
-      })*/
     },
     ptagChange(item) {
-      this.p_tag_id = this.temp.ptag
       this.ctaglist = this.ptag2ctaglist[this.temp.ptag]
-    },
-    ctagChange(items){
-      this.temp.ctags = items
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -251,6 +247,7 @@ export default {
         ptag: '',
         ctags: []
       }
+      this.ctaglist = []
     },
     handleBeforeUpload(file) {
       if (!(file.type === 'image/png' || file.type === 'image/jpg' || file.type === 'image/jpeg')) {
@@ -290,7 +287,13 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           if (this.temp.pic_link && this.temp.ptag) {
-            createBook(this.temp).then(response => {
+            const tempData = Object.assign({}, this.temp)
+            if (tempData.ctags.length > 0){
+              tempData.ctags = tempData.ctags.join(",")
+            } else {
+              tempData.ctags = '';
+            }
+            createBook(tempData).then(response => {
               this.temp.id = response.data
               this.list.unshift(this.temp)
               this.dialogFormVisible = false
@@ -314,7 +317,8 @@ export default {
       this.temp = Object.assign({}, row) // copy obj
       getGoodsTag({category_id:1,goods_id:row.id}).then(response => {
         this.temp.ptag = response.data.ptag
-        this.temp.ctags = response.data.ctags
+        this.$set(this.temp.ctags, response.data.ctags)
+        this.ctaglist = this.ptag2ctaglist[this.temp.ptag]
       })
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -326,6 +330,11 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid && this.temp.ptag) {
           const tempData = Object.assign({}, this.temp)
+          if (tempData.ctags && tempData.ctags.length > 0){
+            tempData.ctags = tempData.ctags.join(",")
+          } else {
+            tempData.ctags = '';
+          }
           updateBook(tempData).then(() => {
             for (const v of this.list) {
               if (v.id === this.temp.id) {

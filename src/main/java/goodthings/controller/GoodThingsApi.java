@@ -47,7 +47,8 @@ public class GoodThingsApi{
         List<StringPair> defaultTags = goodThingsDao.getDefaultTags(category_id);
         JSONObject jb = new JSONObject();
         jb.put("items", defaultTags);
-        return new ControllerResult(20000, jb).toJsonString();
+        String ret = new ControllerResult(20000, jb).toJsonString();
+        return ret;
     }
 
     @ApiOperation(value = "获取所有子标签", notes = "")
@@ -57,7 +58,7 @@ public class GoodThingsApi{
     public String getAllChildrenTags(int category_id) {
         Map<Integer,List<StringPair>> childrenTags = goodThingsDao.getAllChildTags(category_id);
         String ret = new ControllerResult(20000, childrenTags).toJsonString();
-        return new ControllerResult(20000, "suc").toJsonString();
+        return ret;
     }
 
     @ApiOperation(value = "获取子标签", notes = "")
