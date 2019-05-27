@@ -77,7 +77,7 @@
             </el-radio-group>
           </div>
           <div>
-            <el-checkbox-group v-model="temp.ctags">
+            <el-checkbox-group v-model="checkedCtags">
               <el-checkbox-button v-for="item in ctaglist" :label="item.id" :key="item.id">{{item.name}}</el-checkbox-button>
             </el-checkbox-group>
           </div>
@@ -162,7 +162,7 @@ export default {
   },
   data() {
     return {
-      checked: false ,
+      checkedCtags: [] ,
       tableKey: 0,
       list: null,
       total: 0,
@@ -187,8 +187,7 @@ export default {
         press: '',
         out_link: '',
         description: '',
-        ptag: '',
-        ctags: []
+        ptag: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -199,7 +198,8 @@ export default {
       rules: {
         book_name: [{ required: true, message: 'book_name is required', trigger: 'blur' }],
         author: [{ required: true, message: 'author is required', trigger: 'change' }],
-        press: [{ required: true, message: 'author is required', trigger: 'change' }]
+        press: [{ required: true, message: 'press is required', trigger: 'change' }],
+        ptag: [{ required: true, message: 'ptag is required', trigger: 'change' }]
       },
       downloadLoading: false
     }
@@ -230,6 +230,7 @@ export default {
     },
     ptagChange(item) {
       this.ctaglist = this.ptag2ctaglist[this.temp.ptag]
+      this.checkedCtags = []
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -244,8 +245,7 @@ export default {
         out_link: '',
         pic_link: '',
         description: '',
-        ptag: '',
-        ctags: []
+        ptag: ''
       }
       this.ctaglist = []
     },
@@ -286,10 +286,20 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          if (this.temp.pic_link && this.temp.ptag) {
+          if (!this.temp.pic_link ) {
+            this.$notify.error({
+              title: '图片缺失',
+              message: '请上传图片'
+            })
+          } else if(!this.temp.ptag){
+            this.$notify.error({
+              title: '标签缺失',
+              message: '请选择标签'
+            })
+          }else {
             const tempData = Object.assign({}, this.temp)
-            if (tempData.ctags.length > 0){
-              tempData.ctags = tempData.ctags.join(",")
+            if (this.checkedCtags.length > 0){
+              tempData.ctags = this.checkedCtags.join(",")
             } else {
               tempData.ctags = '';
             }
@@ -304,11 +314,6 @@ export default {
                 duration: 2000
               })
             })
-          } else {
-            this.$notify.error({
-              title: '图片缺失',
-              message: '请上传图片'
-            })
           }
         }
       })
@@ -317,7 +322,7 @@ export default {
       this.temp = Object.assign({}, row) // copy obj
       getGoodsTag({category_id:1,goods_id:row.id}).then(response => {
         this.temp.ptag = response.data.ptag
-        this.$set(this.temp.ctags, response.data.ctags)
+        this.checkedCtags = response.data.ctags
         this.ctaglist = this.ptag2ctaglist[this.temp.ptag]
       })
       this.dialogStatus = 'update'
@@ -330,8 +335,8 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid && this.temp.ptag) {
           const tempData = Object.assign({}, this.temp)
-          if (tempData.ctags && tempData.ctags.length > 0){
-            tempData.ctags = tempData.ctags.join(",")
+          if (this.checkedCtags && this.checkedCtags.length > 0){
+            tempData.ctags = this.checkedCtags.join(",")
           } else {
             tempData.ctags = '';
           }
