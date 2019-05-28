@@ -29,7 +29,7 @@ public class BookDao {
     @Autowired
     private GoodThingsDao goodThingsDao;
 
-    final String booksql = "select a.id,a.book_name,a.out_link,a.pic_link,a.author,a.press,a.description,a.isdel,a.add_time";
+    final String booksql = "select DISTINCT a.id,a.book_name,a.out_link,a.pic_link,a.author,a.press,a.description,a.isdel,a.add_time";
     private String generateSql(String name, String isDel){
         String sql = "";
         if (StringUtils.isNotBlank(isDel)) {
@@ -66,8 +66,8 @@ public class BookDao {
         }
         String sql = booksql + ",c.owner_num,c.approval_num from book as a"
                 + " join goods_tag as b on a.id=b.goods_id and b.category_id=" + GoodsCategory.book.value()
-                + " join popular as c on b.goods_id=c.goods_id and c.category_id=" + GoodsCategory.book.value()
-                + " where a.isdel=0 and b.tag_id in (" + query + ") order by c.approval_num,c.owner_num desc limit " + offset + "," + pageSize;
+                + " left join popular as c on b.goods_id=c.goods_id and c.category_id=" + GoodsCategory.book.value()
+                + " where a.isdel=0 and b.tag_id in (" + query + ") order by c.approval_num desc,c.owner_num desc limit " + offset + "," + pageSize;
         return (List<Book>) jdbcTemplate.query(sql, new BookRowMapper());
     }
     public List<Book> searchBooksExcludeHad(String tagIds,int userId,int offset,int pageSize){
