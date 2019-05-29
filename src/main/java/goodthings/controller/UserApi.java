@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +24,8 @@ import java.util.Set;
 
 @RestController
 @RequestMapping(value="/user")
-public class UserApi extends ControllerSupport{
+public class UserApi{
+    private Logger logger = LoggerFactory.getLogger(UserApi.class);
     @Autowired
     private UserDao userDao;
 
@@ -32,6 +35,7 @@ public class UserApi extends ControllerSupport{
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public String login(@RequestBody UserLoginDto loginInfo) {
         User user = userDao.loginUser(loginInfo.getUsername(), loginInfo.getPassword());
+        logger.info(JSONObject.toJSONString(user));
         if (user != null) {
             JSONObject jb = new JSONObject();
             jb.put("uid",user.getUserId());
@@ -40,6 +44,8 @@ public class UserApi extends ControllerSupport{
             String token = JavaWebToken.createJavaWebToken(jb);
             JSONObject data = new JSONObject();
             data.put("token", token);
+            String ret = new ControllerResult(20000, data).toJsonString();
+            logger.info(ret);
             return new ControllerResult(20000, data).toJsonString();
         }else {
 /*            JSONObject data = new JSONObject();

@@ -27,12 +27,12 @@ public class importGoods {
         return dataSource.getConnection();
     }
     public static void main(String[] args) throws IOException, SQLException {
-        String json = FileUtils.readFileToString(new File("E:\\goodthings\\3-6岁书单.txt"));
+        String json = FileUtils.readFileToString(new File("E:\\goodthings\\new\\11-14岁书单.txt"));
         String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         JSONArray ja = JSONArray.fromObject(json);
         Connection conn = getConnection();
         String sql = "insert into book(book_name,out_link,pic_link,author,press,add_time) values(?,?,?,?,?,?)";
-        String tagSql = "insert into goods_tag(goods_id,category_id,tag_id) values(?,1,2)";
+        String tagSql = "insert into goods_tag(goods_id,category_id,tag_id) values(?,1,4)";
         String popularSql = "insert into popular(goods_id,category_id,owner_num,approval_num) value(?,1,?,?)";
         PreparedStatement stm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         PreparedStatement stmTag = conn.prepareStatement(tagSql);

@@ -2,6 +2,7 @@ package goodthings.dao;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import goodthings.bean.Book;
 import goodthings.bean.GoodsCategory;
 import org.apache.commons.lang.StringUtils;
@@ -33,23 +34,37 @@ public class BookDao {
     private String generateSql(String name, String isDel){
         String sql = "";
         if (StringUtils.isNotBlank(isDel)) {
-            sql += " and a.isdel = '" + isDel + "'";
+            sql += " and a.isdel = ?";
         }
         if (StringUtils.isNotBlank(name)) {
-            sql += " and a.book_name like '%" + name + "%'";
+            sql += " and a.book_name like ?";
         }
         return sql;
     }
-    public long getCountBooks(String name, String isDel){
+    public long getCountBooks(String name, String isDel) {
         String sql = "select count(1) from book as a where 1=1";
+        List<String> list = Lists.newArrayList();
+        if (StringUtils.isNotBlank(isDel)) {
+            list.add(isDel);
+        }
+        if (StringUtils.isNotBlank(name)) {
+            list.add("%"+name+"%");
+        }
         sql += generateSql(name, isDel);
-        return jdbcTemplate.queryForObject(sql, Long.class);
+        return jdbcTemplate.queryForObject(sql, list.toArray(), Long.class);
     }
     public List<Book> searchAllBooks(String name, String isDel, int offset, int pageSize) {
         String sql = booksql + " from book as a where 1=1";
+        List<String> list = Lists.newArrayList();
+        if (StringUtils.isNotBlank(isDel)) {
+            list.add(isDel);
+        }
+        if (StringUtils.isNotBlank(name)) {
+            list.add("%"+name+"%");
+        }
         sql += generateSql(name, isDel);
         sql += " limit " + offset + "," + pageSize;
-        return jdbcTemplate.query(sql, new BookRowMapper());
+        return jdbcTemplate.query(sql, list.toArray(),new BookRowMapper());
     }
 
     public List<Book> searchBooksByTags(String tagIds, int offset, int pageSize){
