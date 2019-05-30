@@ -34,19 +34,14 @@
           </a>
         </template>
       </el-table-column>
-      <el-table-column label="书名" min-width="150px">
+      <el-table-column label="视频名称" min-width="150px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.book_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="作者" width="110px" align="center">
+      <el-table-column label="出品方" width="110px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="出版社" width="80px">
-        <template slot-scope="scope">
-          <span>{{ scope.row.press }}</span>
         </template>
       </el-table-column>
       <el-table-column label="简单描述" width="80px">
@@ -94,14 +89,11 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="书名" prop="book_name">
+        <el-form-item label="视频名称" prop="book_name">
           <el-input v-model="temp.book_name" />
         </el-form-item>
-        <el-form-item label="作者" prop="author">
+        <el-form-item label="出品方" prop="author">
           <el-input v-model="temp.author" />
-        </el-form-item>
-        <el-form-item label="出版社" prop="press">
-          <el-input v-model="temp.press" />
         </el-form-item>
         <el-form-item label="外链地址" prop="out_link">
           <el-input v-model="temp.out_link" />
@@ -155,7 +147,7 @@ import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'bookManager',
+  name: 'videoManager',
   components: { Pagination },
   directives: { waves },
   filters: {
