@@ -361,7 +361,7 @@ export default {
     },
 
     handleDelete(row) {
-      deleteBook(row).then(() => {
+      deleteBook({'id':row.id}).then(() => {
         this.$notify({
           title: '成功',
           message: '删除成功',
