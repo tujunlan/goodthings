@@ -69,15 +69,21 @@ export const constantRoutes = [
   {
     path: '/admin',
     component: Layout,
-    redirect: '/example/table',
+    redirect: '/admin/manager',
     name: '后台维护',
     meta: { title: '后台维护', icon: 'example' },
     children: [
       {
-        path: 'complex-table',
+        path: 'book-table',
         name: 'BookManager',
         component: () => import('@/views/admin/book-manager'),
         meta: { title: '书单维护', icon: 'form' }
+      },
+      {
+        path: 'video-table',
+        name: 'VideoManager',
+        component: () => import('@/views/admin/video-manager'),
+        meta: { title: '视频维护', icon: 'form' }
       },
       {
         path: 'tag',
