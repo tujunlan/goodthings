@@ -80,6 +80,12 @@ export const constantRoutes = [
         meta: { title: '书单维护', icon: 'form' }
       },
       {
+        path: 'audio-table',
+        name: 'AudioManager',
+        component: () => import('@/views/admin/audio-manager'),
+        meta: { title: '音频维护', icon: 'form' }
+      },
+      {
         path: 'video-table',
         name: 'VideoManager',
         component: () => import('@/views/admin/video-manager'),

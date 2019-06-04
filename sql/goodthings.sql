@@ -11,11 +11,27 @@
  Target Server Version : 50562
  File Encoding         : 65001
 
- Date: 03/06/2019 08:37:55
+ Date: 04/06/2019 08:24:01
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for audio
+-- ----------------------------
+DROP TABLE IF EXISTS `audio`;
+CREATE TABLE `audio`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `audio_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `out_link` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `pic_link` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `announcer` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `isdel` tinyint(1) NOT NULL DEFAULT 0,
+  `add_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for book
@@ -66,7 +82,7 @@ CREATE TABLE `picture`  (
   `image` mediumblob NOT NULL,
   PRIMARY KEY (`pic_id`) USING BTREE,
   INDEX `pic_link`(`pic_link`(255)) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for popular
@@ -94,7 +110,7 @@ CREATE TABLE `tag`  (
   `add_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`tag_id`) USING BTREE,
   INDEX `tagName`(`tag_name`, `category_id`, `p_tag_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for user
@@ -136,6 +152,6 @@ CREATE TABLE `video`  (
   `isdel` tinyint(1) NOT NULL DEFAULT 0,
   `add_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.video_name" placeholder="书名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.audio_name" placeholder="书名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
@@ -34,14 +34,14 @@
           </a>
         </template>
       </el-table-column>
-      <el-table-column label="视频名称" min-width="150px">
+      <el-table-column label="音频名称" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.video_name }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.audio_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="出品方" width="110px" align="center">
+      <el-table-column label="播音员" width="110px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.producer }}</span>
+          <span>{{ scope.row.announcer }}</span>
         </template>
       </el-table-column>
       <el-table-column label="简单描述" width="80px">
@@ -82,18 +82,18 @@
             ref="imgUpload"
             action="/dev-api/goods/upload_image"
             :show-file-list="false"
-            :data="{category_id:video_id}"
+            :data="{category_id:audio_id}"
             :before-upload="handleBeforeUpload"
             :on-success="handlePicUploadSuccess">
             <img v-if="temp.pic_link" :src="temp.pic_link" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="视频名称" prop="video_name">
-          <el-input v-model="temp.video_name" />
+        <el-form-item label="音频名称" prop="audio_name">
+          <el-input v-model="temp.audio_name" />
         </el-form-item>
-        <el-form-item label="出品方" prop="producer">
-          <el-input v-model="temp.producer" />
+        <el-form-item label="播音员" prop="announcer">
+          <el-input v-model="temp.announcer" />
         </el-form-item>
         <el-form-item label="外链地址" prop="out_link">
           <el-input v-model="temp.out_link" />
@@ -140,22 +140,22 @@
   }
 </style>
 <script>
-import { getAllVideos, createVideo, updateVideo, deleteVideo } from '@/api/video'
+import { getAllAudios, createAudio, updateAudio, deleteAudio } from '@/api/audio'
 import {getParentTags,getAllTags,getGoodsTag} from '@/api/goods'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-const video_id = 3;
+const audio_id = 2;
 export default {
-  name: 'videoManager',
+  name: 'audioManager',
   components: { Pagination },
   directives: { waves },
   filters: {
   },
   data() {
     return {
-      video_id,
+      audio_id,
       checkedCtags: [],
       tableKey: 0,
       list: null,
@@ -164,11 +164,11 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        video_name: undefined,
+        audio_name: undefined,
         type: undefined
       },
       ptagQuery: {
-        category_id: video_id
+        category_id: audio_id
       },
       ptaglist: null,
       ptag2ctaglist: null,
@@ -176,8 +176,8 @@ export default {
       temp: {
         id: undefined,
         pic_link: '',
-        video_name: '',
-        producer: '',
+        audio_name: '',
+        announcer: '',
         out_link: '',
         description: '',
         ptag: ''
@@ -189,8 +189,8 @@ export default {
         create: '添加'
       },
       rules: {
-        video_name: [{ required: true, message: 'video_name is required', trigger: 'blur' }],
-        producer: [{ required: true, message: 'producer is required', trigger: 'change' }],
+        audio_name: [{ required: true, message: 'audio_name is required', trigger: 'blur' }],
+        announcer: [{ required: true, message: 'announcer is required', trigger: 'change' }],
         ptag: [{ required: true, message: 'ptag is required', trigger: 'change' }]
       },
       downloadLoading: false
@@ -203,7 +203,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      getAllVideos(this.listQuery).then(response => {
+      getAllAudios(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         // Just to simulate the time of the request
@@ -231,8 +231,8 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        video_name: '',
-        producer: '',
+        audio_name: '',
+        announcer: '',
         out_link: '',
         pic_link: '',
         description: '',
@@ -294,7 +294,7 @@ export default {
             } else {
               tempData.ctags = '';
             }
-            createVideo(tempData).then(response => {
+            createAudio(tempData).then(response => {
               this.temp.id = response.data
               this.list.unshift(this.temp)
               this.dialogFormVisible = false
@@ -311,7 +311,7 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      getGoodsTag({category_id:video_id,goods_id:row.id}).then(response => {
+      getGoodsTag({category_id:audio_id,goods_id:row.id}).then(response => {
         this.temp.ptag = response.data.ptag
         this.checkedCtags = response.data.ctags
         this.ctaglist = this.ptag2ctaglist[this.temp.ptag]
@@ -331,7 +331,7 @@ export default {
           } else {
             tempData.ctags = '';
           }
-          updateVideo(tempData).then(() => {
+          updateAudio(tempData).then(() => {
             for (const v of this.list) {
               if (v.id === this.temp.id) {
                 const index = this.list.indexOf(v)
@@ -352,7 +352,7 @@ export default {
     },
 
     handleDelete(row) {
-      deleteVideo(row).then(() => {
+      deleteAudio(row).then(() => {
         this.$notify({
           title: '成功',
           message: '删除成功',

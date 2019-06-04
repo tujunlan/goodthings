@@ -87,7 +87,7 @@
             ref="imgUpload"
             action="/dev-api/goods/upload_image"
             :show-file-list="false"
-            :data="{category_id:1}"
+            :data="{category_id:book_id}"
             :before-upload="handleBeforeUpload"
             :on-success="handlePicUploadSuccess">
             <img v-if="temp.pic_link" :src="temp.pic_link" class="avatar">
@@ -154,6 +154,7 @@ import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
+const book_id = 1;
 export default {
   name: 'bookManager',
   components: { Pagination },
@@ -162,6 +163,7 @@ export default {
   },
   data() {
     return {
+      book_id,
       checkedCtags: [] ,
       tableKey: 0,
       list: null,
@@ -174,7 +176,7 @@ export default {
         type: undefined
       },
       ptagQuery: {
-        category_id: 1
+        category_id: book_id
       },
       ptaglist: null,
       ptag2ctaglist: null,
@@ -320,7 +322,7 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      getGoodsTag({category_id:1,goods_id:row.id}).then(response => {
+      getGoodsTag({category_id:book_id,goods_id:row.id}).then(response => {
         this.temp.ptag = response.data.ptag
         this.checkedCtags = response.data.ctags
         this.ctaglist = this.ptag2ctaglist[this.temp.ptag]
