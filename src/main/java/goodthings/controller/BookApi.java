@@ -11,10 +11,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
@@ -81,17 +78,19 @@ public class BookApi {
 
     @ApiOperation(value = "修改书", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "int"),
-            @ApiImplicitParam(name = "book_name", value = "书名", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "pic_link", value = "图片链接", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "out_link", value = "外链", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "author", value = "作者", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "press", value = "出版社", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "description", value = "简介", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "ptag", value = "简介", required = true, dataType = "int"),
-            @ApiImplicitParam(name = "ctags", value = "简介", required = true, dataType = "String")})
+            @ApiImplicitParam(name = "json", value = "json", required = true, dataType = "string")})
     @RequestMapping(value = "update_book_info", method = RequestMethod.POST)
-    public String updateBookInfo(int id, String book_name, String pic_link, String author, String press, String out_link, String description,int ptag,String ctags) {
+    public String updateBookInfo(@RequestBody String json) {
+        JSONObject params = JSONObject.parseObject(json);
+        int id = params.getIntValue("id");
+        String book_name = params.getString("book_name");
+        String pic_link = params.getString("pic_link");
+        String author = params.getString("author");
+        String press = params.getString("press");
+        String out_link = params.getString("out_link");
+        String description = params.getString("description");
+        int ptag = params.getIntValue("ptag");
+        String ctags = params.getString("ctags");
         bookDao.updateBookInfo(id, book_name, out_link, author, press, description, pic_link);
         bookDao.insertBookTag(id, ptag, ctags);
         return new ControllerResult(20000, "success").toJsonString();
@@ -99,17 +98,19 @@ public class BookApi {
 
     @ApiOperation(value = "创建书", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "book_name", value = "书名", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "pic_link", value = "图片链接", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "out_link", value = "外链", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "author", value = "作者", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "press", value = "出版社", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "description", value = "简介", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "ptag", value = "简介", required = true, dataType = "int"),
-            @ApiImplicitParam(name = "ctags", value = "简介", required = true, dataType = "String")
+            @ApiImplicitParam(name = "json", value = "json", required = true, dataType = "string")
     })
     @RequestMapping(value = "create_book_info", method = RequestMethod.POST)
-    public String createBookInfo(String book_name, String pic_link, String out_link, String author, String press, String description,int ptag,String ctags) {
+    public String createBookInfo(@RequestBody String json) {
+        JSONObject params = JSONObject.parseObject(json);
+        String book_name = params.getString("book_name");
+        String pic_link = params.getString("pic_link");
+        String author = params.getString("author");
+        String press = params.getString("press");
+        String out_link = params.getString("out_link");
+        String description = params.getString("description");
+        int ptag = params.getIntValue("ptag");
+        String ctags = params.getString("ctags");
         int id = bookDao.insertBookInfo(book_name, out_link, pic_link, author, press, description);
         bookDao.insertBookTag(id, ptag, ctags);
         return new ControllerResult(20000, id).toJsonString();

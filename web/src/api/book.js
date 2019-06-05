@@ -18,14 +18,14 @@ export function updateBook(params) {
   return request({
     url: '/book/update_book_info',
     method: 'post',
-    params: params
+    data: params
   })
 }
 export function createBook(params) {
   return request({
     url: '/book/create_book_info',
     method: 'post',
-    params: params
+    data: params
   })
 }
 export function deleteBook(params) {
