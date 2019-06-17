@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -75,16 +76,18 @@ public class VideoApi {
 
     @ApiOperation(value = "修改视频", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "int"),
-            @ApiImplicitParam(name = "video_name", value = "视频名", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "pic_link", value = "图片链接", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "out_link", value = "外链", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "producer", value = "出品方", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "description", value = "简介", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "ptag", value = "大标签id", required = true, dataType = "int"),
-            @ApiImplicitParam(name = "ctags", value = "子标签id", required = true, dataType = "String")})
+            @ApiImplicitParam(name = "json", value = "json", required = true, dataType = "string")})
     @RequestMapping(value = "update_video_info", method = RequestMethod.POST)
-    public String updateVideoInfo(int id, String video_name, String pic_link, String producer, String out_link, String description,int ptag,String ctags) {
+    public String updateVideoInfo(@RequestBody String json) {
+        JSONObject params = JSONObject.parseObject(json);
+        int id = params.getIntValue("id");
+        String video_name = params.getString("video_name");
+        String pic_link = params.getString("pic_link");
+        String producer = params.getString("producer");
+        String out_link = params.getString("out_link");
+        String description = params.getString("description");
+        int ptag = params.getIntValue("ptag");
+        String ctags = params.getString("ctags");
         videoDao.updateVideoInfo(id, video_name, out_link, producer, description, pic_link);
         videoDao.insertVideoTag(id, ptag, ctags);
         return new ControllerResult(20000, "success").toJsonString();
@@ -92,16 +95,17 @@ public class VideoApi {
 
     @ApiOperation(value = "创建视频", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "video_name", value = "视频名", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "pic_link", value = "图片链接", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "out_link", value = "外链", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "producer", value = "出品方", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "description", value = "简介", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "ptag", value = "大标签id", required = true, dataType = "int"),
-            @ApiImplicitParam(name = "ctags", value = "子标签id", required = true, dataType = "String")
-    })
+            @ApiImplicitParam(name = "json", value = "json", required = true, dataType = "string")})
     @RequestMapping(value = "create_video_info", method = RequestMethod.POST)
-    public String createVideoInfo(String video_name, String pic_link, String out_link, String producer, String description,int ptag,String ctags) {
+    public String createVideoInfo(@RequestBody String json) {
+        JSONObject params = JSONObject.parseObject(json);
+        String video_name = params.getString("video_name");
+        String pic_link = params.getString("pic_link");
+        String producer = params.getString("producer");
+        String out_link = params.getString("out_link");
+        String description = params.getString("description");
+        int ptag = params.getIntValue("ptag");
+        String ctags = params.getString("ctags");
         int id = videoDao.insertVideoInfo(video_name, out_link, pic_link, producer, description);
         videoDao.insertVideoTag(id, ptag, ctags);
         return new ControllerResult(20000, id).toJsonString();

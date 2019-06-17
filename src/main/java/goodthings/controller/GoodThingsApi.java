@@ -3,6 +3,7 @@ package goodthings.controller;
 import com.alibaba.fastjson.JSONObject;
 import goodthings.bean.StringPair;
 import goodthings.dao.GoodThingsDao;
+import goodthings.dao.PictureDao;
 import goodthings.service.PictureService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +31,8 @@ public class GoodThingsApi{
     private GoodThingsDao goodThingsDao;
     @Autowired
     private PictureService pictureService;
+    @Autowired
+    private PictureDao pictureDao;
 
     @ApiOperation(value = "获取所有物品类型", notes = "")
     @RequestMapping(value = "category", method = RequestMethod.POST)
@@ -118,5 +122,11 @@ public class GoodThingsApi{
         jb.put("ptag", ptagId);
         jb.put("ctags", cagId);
         return new ControllerResult(20000, jb).toJsonString();
+    }
+    @ApiOperation(value = "下载所有照片", notes = "")
+    @RequestMapping(value = "pic_script", method = RequestMethod.POST)
+    public String picDownLoadScript() throws IOException {
+//        pictureDao.updatePicLink();
+        return new ControllerResult(20000, "").toJsonString();
     }
 }

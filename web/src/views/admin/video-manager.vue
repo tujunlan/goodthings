@@ -80,7 +80,7 @@
         <el-form-item label="图片" prop="pic_link">
           <el-upload
             ref="imgUpload"
-            action="/dev-api/goods/upload_image"
+            :action="uploadApi"
             :show-file-list="false"
             :data="{category_id:video_id}"
             :before-upload="handleBeforeUpload"
@@ -156,6 +156,7 @@ export default {
   data() {
     return {
       video_id,
+      uploadApi: this.GLOBAL.uploadApi,
       checkedCtags: [],
       tableKey: 0,
       list: null,

@@ -18,14 +18,14 @@ export function updateVideo(params) {
   return request({
     url: '/video/update_video_info',
     method: 'post',
-    params: params
+    data: params
   })
 }
 export function createVideo(params) {
   return request({
     url: '/video/create_video_info',
     method: 'post',
-    params: params
+    data: params
   })
 }
 export function deleteVideo(params) {

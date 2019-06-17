@@ -20,9 +20,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class Swagger2 {
     @Value("${swagger.enable}")
     private boolean enableSwagger;
+    @Value("${swagger.url}")
+    private String url;
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .host(url)
                 .apiInfo(apiInfo())
                 .enable(enableSwagger)
                 .select()

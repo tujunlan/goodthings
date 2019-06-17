@@ -18,14 +18,14 @@ export function updateAudio(params) {
   return request({
     url: '/audio/update_audio_info',
     method: 'post',
-    params: params
+    data: params
   })
 }
 export function createAudio(params) {
   return request({
     url: '/audio/create_audio_info',
     method: 'post',
-    params: params
+    data: params
   })
 }
 export function deleteAudio(params) {

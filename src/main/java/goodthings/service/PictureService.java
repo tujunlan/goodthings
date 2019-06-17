@@ -59,7 +59,7 @@ public class PictureService {
         if(!file.isEmpty()){
             try {
                 // 文件保存路径
-                String subDir = "upload/" + GoodsCategory.getName(categoryId);
+                String subDir = GoodsCategory.getName(categoryId);
                 String fullDir = FilenameUtils.concat(uploadPath, subDir);
                 FileUtils.forceMkdir(new File(fullDir));
                 String fileName = generateImageId()+getFormat(file.getOriginalFilename());
