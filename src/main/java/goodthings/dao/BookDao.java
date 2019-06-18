@@ -31,38 +31,43 @@ public class BookDao {
     private GoodThingsDao goodThingsDao;
 
     final String booksql = "select DISTINCT a.id,a.book_name,a.out_link,a.pic_link,a.author,a.press,a.description,a.isdel,a.add_time";
-    private String generateSql(String name, String isDel){
+    private String generateSql(String name, String ptag, String isDel,List<Object> args){
         String sql = "";
         if (StringUtils.isNotBlank(isDel)) {
             sql += " and a.isdel = ?";
+            args.add(isDel);
         }
         if (StringUtils.isNotBlank(name)) {
             sql += " and a.book_name like ?";
+            args.add("%" + name + "%");
+        }
+        if (StringUtils.isNotBlank(ptag)) {
+            sql += " and b.tag_id=?";
+            args.add(ptag);
         }
         return sql;
     }
-    public long getCountBooks(String name, String isDel) {
-        String sql = "select count(1) from book as a where 1=1";
-        List<String> list = Lists.newArrayList();
-        if (StringUtils.isNotBlank(isDel)) {
-            list.add(isDel);
+
+    public long getCountBooks(String name, String ptag, String isDel) {
+        String sql;
+        if (StringUtils.isNotBlank(ptag)) {
+            sql = "select count(1) from book as a join goods_tag as b on b.category_id=" + GoodsCategory.book.value() + " and a.id=b.goods_id where 1=1";
+        } else {
+            sql = "select count(1) from book as a where 1=1";
         }
-        if (StringUtils.isNotBlank(name)) {
-            list.add("%"+name+"%");
-        }
-        sql += generateSql(name, isDel);
+        List<Object> list = Lists.newArrayList();
+        sql += generateSql(name, ptag, isDel, list);
         return jdbcTemplate.queryForObject(sql, list.toArray(), Long.class);
     }
-    public List<Book> searchAllBooks(String name, String isDel, int offset, int pageSize) {
-        String sql = booksql + " from book as a where 1=1";
-        List<String> list = Lists.newArrayList();
-        if (StringUtils.isNotBlank(isDel)) {
-            list.add(isDel);
+    public List<Book> searchAllBooks(String name,String ptag, String isDel, int offset, int pageSize) {
+        String sql;
+        if (StringUtils.isNotBlank(ptag)) {
+            sql = booksql + " from book as a join goods_tag as b on b.category_id=" + GoodsCategory.book.value() + " and a.id=b.goods_id";
+        } else {
+            sql = booksql + " from book as a where 1=1";
         }
-        if (StringUtils.isNotBlank(name)) {
-            list.add("%"+name+"%");
-        }
-        sql += generateSql(name, isDel);
+        List<Object> list = Lists.newArrayList();
+        sql += generateSql(name, ptag, isDel, list);
         sql += " limit " + offset + "," + pageSize;
         return jdbcTemplate.query(sql, list.toArray(),new BookRowMapper());
     }

@@ -47,16 +47,18 @@ public class BookApi {
         jb.put("items", books);
         return new ControllerResult(20000, jb).toJsonString();
     }
+
     @ApiOperation(value = "查询所有书", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "book_name", value = "书名", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "ptag", value = "大类", required = false, dataType = "int"),
             @ApiImplicitParam(name = "page", value = "页码", required = true, dataType = "int"),
             @ApiImplicitParam(name = "limit", value = "页内数量", required = true, dataType = "int")})
     @RequestMapping(value = "all_books", method = RequestMethod.POST)
-    public String getAllBooks(String book_name, int page, int limit) {
+    public String getAllBooks(String book_name, String ptag, int page, int limit) {
         int offset = (page - 1) * limit;
-        long total = bookDao.getCountBooks(book_name, "0");
-        List<Book> books = bookDao.searchAllBooks(book_name, "0", offset, limit);
+        long total = bookDao.getCountBooks(book_name, ptag, "0");
+        List<Book> books = bookDao.searchAllBooks(book_name, ptag, "0", offset, limit);
         JSONObject jb = new JSONObject();
         jb.put("total", total);
         jb.put("items", books);

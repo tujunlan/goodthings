@@ -2,6 +2,9 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.book_name" placeholder="书名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-select v-model="listQuery.ptag" clearable style="width: 90px" class="filter-item">
+        <el-option v-for="item in ptaglist" :key="item.id" :label="item.name" :value="item.id" />
+      </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
@@ -174,7 +177,7 @@ export default {
         page: 1,
         limit: 20,
         book_name: undefined,
-        type: undefined
+        ptag: undefined
       },
       ptagQuery: {
         category_id: book_id
