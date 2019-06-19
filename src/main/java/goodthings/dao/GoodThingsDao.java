@@ -107,4 +107,29 @@ public class GoodThingsDao {
         String sql = "select a.tag_id from goods_tag as a join tag as b on a.tag_id=b.tag_id and b.p_tag_id<>0 and a.category_id=? and a.goods_id=?";
         return jdbcTemplate.queryForList(sql, new Object[]{categoryId, goodsId}, Integer.class);
     }
+
+    public void updGoodsRef(int goodsId, int userId, int categoryId, String refType, int opr) {
+        String tbname = "user_goods_" + refType;
+        String sql;
+        if (opr == 1) {
+            sql = "insert into " + tbname + "(user_id,goods_id,category_id) values(?,?,?)";
+        } else {
+            sql = "delete from " + tbname + " where user_id=? and goods_id=? and category_id=?";
+        }
+        jdbcTemplate.update(sql, userId, goodsId, categoryId);
+        if ("had".equals(refType)) {
+            if (opr == 1) {
+                sql = "insert into popular(goods_id,category_id,owner_num) values(?,?,1) ON DUPLICATE KEY UPDATE owner_num=owner_num+1";
+            } else {
+                sql = "update popular set owner_num=owner_num-1 where goods_id=? and category_id=?";
+            }
+        }else {
+            if (opr == 1) {
+                sql = "insert into popular(goods_id,category_id,want_num) values(?,?,1) ON DUPLICATE KEY UPDATE want_num=want_num+1";
+            } else {
+                sql = "update popular set want_num=want_num-1 where goods_id=? and category_id=?";
+            }
+        }
+        jdbcTemplate.update(sql, goodsId, categoryId);
+    }
 }

@@ -1,4 +1,4 @@
-package goodthings.dao;
+package goodthings.dao.pojo;
 
 import goodthings.bean.User;
 import org.springframework.jdbc.core.RowMapper;

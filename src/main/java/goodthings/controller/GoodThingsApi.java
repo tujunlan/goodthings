@@ -77,7 +77,7 @@ public class GoodThingsApi{
     }
     @ApiOperation(value = "删除子标签", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "tag_id", value = "tag_id", required = true, dataType = "int")})
+            @ApiImplicitParam(name = "tag_id", value = "标签id", required = true, dataType = "int")})
     @RequestMapping(value = "delete_tag", method = RequestMethod.POST)
     public String deleteTag(int tag_id) {
         goodThingsDao.deleteTag(tag_id);
@@ -85,7 +85,7 @@ public class GoodThingsApi{
     }
     @ApiOperation(value = "新建子标签", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "tag_name", value = "tag_name", required = true, dataType = "string")})
+            @ApiImplicitParam(name = "tag_name", value = "标签名称", required = true, dataType = "string")})
     @RequestMapping(value = "create_tag", method = RequestMethod.POST)
     public String createTag(int ptag_id,String tag_name,int category_id) {
         int newTagId = goodThingsDao.addChildTag(ptag_id, tag_name, category_id);
@@ -93,7 +93,7 @@ public class GoodThingsApi{
     }
     @ApiOperation(value = "上传图片", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "category_id", value = "书名", required = true, dataType = "int", paramType = "form")})
+            @ApiImplicitParam(name = "category_id", value = "物品种类id", required = true, dataType = "int", paramType = "form")})
     @RequestMapping(value = "upload_image", method = RequestMethod.POST)
     public String upload_image(@ApiParam(value = "图片", required = true)
                                @RequestParam(value = "file") MultipartFile file,
@@ -111,8 +111,8 @@ public class GoodThingsApi{
 
     @ApiOperation(value = "获取物品的标签", notes = "")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "goods_id", value = "goods_id", required = true, dataType = "int"),
-            @ApiImplicitParam(name = "category_id", value = "category_id", required = true, dataType = "int")
+            @ApiImplicitParam(name = "goods_id", value = "物品id", required = true, dataType = "int"),
+            @ApiImplicitParam(name = "category_id", value = "物品种类id", required = true, dataType = "int")
     })
     @RequestMapping(value = "get_goods_tag", method = RequestMethod.POST)
     public String getGoodsTags(int category_id,int goods_id) {
@@ -122,6 +122,20 @@ public class GoodThingsApi{
         jb.put("ptag", ptagId);
         jb.put("ctags", cagId);
         return new ControllerResult(20000, jb).toJsonString();
+    }
+
+    @ApiOperation(value = "设置已有和想看的关系", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "goods_id", value = "物品id", required = true, dataType = "int"),
+            @ApiImplicitParam(name = "user_id", value = "用户id", required = true, dataType = "int"),
+            @ApiImplicitParam(name = "category_id", value = "物品种类id", required = true, dataType = "int"),
+            @ApiImplicitParam(name = "ref_type", value = "想要want，已有had", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "opr", value = "建立关系1，取消关系0", required = true, dataType = "int")
+    })
+    @RequestMapping(value = "update_goods_ref", method = RequestMethod.POST)
+    public String updateGoodsRef(int goods_id, int user_id, int category_id, String ref_type, int opr) {
+        goodThingsDao.updGoodsRef(goods_id, user_id, category_id, ref_type, opr);
+        return new ControllerResult(20000, "").toJsonString();
     }
     @ApiOperation(value = "下载所有照片", notes = "")
     @RequestMapping(value = "pic_script", method = RequestMethod.POST)
