@@ -68,7 +68,7 @@ public class BookDao {
         }
         List<Object> list = Lists.newArrayList();
         sql += generateSql(name, ptag, isDel, list);
-        sql += " limit " + offset + "," + pageSize;
+        sql += " order by a.id limit " + offset + "," + pageSize;
         return jdbcTemplate.query(sql, list.toArray(),new BookRowMapper());
     }
 

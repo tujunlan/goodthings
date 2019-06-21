@@ -310,15 +310,25 @@ export default {
               tempData.ctags = '';
             }
             createBook(tempData).then(response => {
-              this.temp.id = response.data
-              this.list.unshift(this.temp)
-              this.dialogFormVisible = false
-              this.$notify({
-                title: '成功',
-                message: '创建成功',
-                type: 'success',
-                duration: 2000
-              })
+              var code = response.code
+              if (code == 20000) {
+                this.temp.id = response.data;
+                this.list.unshift(this.temp)
+                this.dialogFormVisible = false
+                this.$notify({
+                  title: '成功',
+                  message: '创建成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              }else{
+                this.$alert({
+                  title: '失败',
+                  message: '创建创建',
+                  duration: 2000
+                })
+              }
+
             })
           }
         }

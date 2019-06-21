@@ -104,11 +104,15 @@
       this.ptagQuery.category_id = this.category
       getParentTags(this.ptagQuery).then(response => {
         this.ptaglist = response.data.items
-        this.ptag = this.ptaglist[0].id
-        this.ctagQuery.p_tag_id = this.ptag
-        getChildTags(this.ctagQuery).then(response => {
+        if (this.ptaglist.length > 0) {
+          this.ptag = this.ptaglist[0].id
+          this.ctagQuery.p_tag_id = this.ptag
+          getChildTags(this.ctagQuery).then(response => {
+            this.ctaglist = response.data.items
+          })
+        }else{
           this.ctaglist = response.data.items
-        })
+        }
       })
     },
     ptagChange(item) {

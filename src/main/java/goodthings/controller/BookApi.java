@@ -113,6 +113,10 @@ public class BookApi {
         String description = params.getString("description");
         int ptag = params.getIntValue("ptag");
         String ctags = params.getString("ctags");
+        int cnt = (int) bookDao.getCountBooks(book_name, null, "0");
+        if (cnt > 0) {
+            return new ControllerResult(50000, "已存在该书").toJsonString();
+        }
         int id = bookDao.insertBookInfo(book_name, out_link, pic_link, author, press, description);
         bookDao.insertBookTag(id, ptag, ctags);
         return new ControllerResult(20000, id).toJsonString();
