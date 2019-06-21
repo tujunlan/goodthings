@@ -64,15 +64,16 @@ public class BookApi {
         jb.put("items", books);
         return new ControllerResult(20000, jb).toJsonString();
     }
+
     @ApiOperation(value = "查询所有与我相关的书", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "user_id", value = "用户id", required = true, dataType = "int"),
-            @ApiImplicitParam(name = "want_had", value = "想要的传0，已有的传1", required = true, dataType = "int"),
+            @ApiImplicitParam(name = "ref_type", value = "想要want，已有had", required = true, dataType = "string"),
             @ApiImplicitParam(name = "offset", value = "起点位置", required = true, dataType = "int"),
             @ApiImplicitParam(name = "pagesize", value = "页内数量", required = true, dataType = "int")})
     @RequestMapping(value = "tags_books_referme", method = RequestMethod.POST)
-    public String getGoodsByTags(int user_id, int want_had, int offset, int pagesize) {
-        List<Book> books = bookDao.searchMyBooks(user_id, want_had, offset, pagesize);
+    public String getGoodsByTags(int user_id, String ref_type, int offset, int pagesize) {
+        List<Book> books = bookDao.searchMyBooks(user_id, ref_type, offset, pagesize);
         JSONObject jb = new JSONObject();
         jb.put("items", books);
         return new ControllerResult(20000, jb).toJsonString();

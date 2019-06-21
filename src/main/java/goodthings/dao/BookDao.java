@@ -5,6 +5,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import goodthings.bean.Book;
 import goodthings.bean.GoodsCategory;
+import goodthings.dao.pojo.BookRowMapper;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,13 +15,11 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.jws.Oneway;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.Locale;
 
 @Repository
 public class BookDao {
@@ -99,9 +98,10 @@ public class BookDao {
         return (List<Book>) jdbcTemplate.query(sql, new BookRowMapper());
     }
 
-    public List<Book> searchMyBooks(int userId,int wantHad,int offset,int pageSize) {
-        String sql = booksql + "  from user_goods as b join book as a on b.category_id=" + GoodsCategory.book.value()
-                + " and b.goods_id=a.id and b.user_id=" + userId + " and b.want_had=" + wantHad+" order by b.id limit " + offset + "," + pageSize;
+    public List<Book> searchMyBooks(int userId,String wantHad,int offset,int pageSize) {
+        String tbname = "user_goods_" + wantHad;
+        String sql = booksql + " from book as a join " + tbname + " as b on b.category_id=" + GoodsCategory.book.value()
+                + " and b.goods_id=a.id and b.user_id=" + userId + " order by a.id limit " + offset + "," + pageSize;
         return (List<Book>) jdbcTemplate.query(sql, new BookRowMapper());
     }
 
