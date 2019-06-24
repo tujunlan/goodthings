@@ -7,6 +7,7 @@ public class Video {
     private String pic_link;
     private String producer;
     private String description;
+    private int duration;
     private int isdel;
     private String add_time;
     private int owner_num;
@@ -58,6 +59,14 @@ public class Video {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     public int getIsdel() {

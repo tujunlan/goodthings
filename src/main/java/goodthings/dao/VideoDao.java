@@ -29,40 +29,44 @@ public class VideoDao {
     @Autowired
     private GoodThingsDao goodThingsDao;
 
-    final String videosql = "select DISTINCT a.id,a.video_name,a.out_link,a.pic_link,a.producer,a.description,a.isdel,a.add_time";
-    private String generateSql(String name, String isDel){
+    final String videosql = "select DISTINCT a.id,a.video_name,a.out_link,a.pic_link,a.producer,a.description,a.duration,a.isdel,a.add_time";
+    private String generateSql(String name,String ptag, String isDel,List<Object> args){
         String sql = "";
         if (StringUtils.isNotBlank(isDel)) {
             sql += " and a.isdel = ?";
+            args.add(isDel);
         }
         if (StringUtils.isNotBlank(name)) {
             sql += " and a.video_name like ?";
+            args.add("%" + name + "%");
+        }
+        if (StringUtils.isNotBlank(ptag)) {
+            sql += " and b.tag_id=?";
+            args.add(ptag);
         }
         return sql;
     }
-    public long getCountVideos(String name, String isDel) {
-        String sql = "select count(1) from video as a where 1=1";
-        List<String> list = Lists.newArrayList();
-        if (StringUtils.isNotBlank(isDel)) {
-            list.add(isDel);
+    public long getCountVideos(String name, String ptag, String isDel) {
+        String sql;
+        if (StringUtils.isNotBlank(ptag)) {
+            sql = "select count(1) from video as a join goods_tag as b on b.category_id=" + GoodsCategory.video.value() + " and a.id=b.goods_id where 1=1";
+        } else {
+            sql = "select count(1) from video as a where 1=1";
         }
-        if (StringUtils.isNotBlank(name)) {
-            list.add("%"+name+"%");
-        }
-        sql += generateSql(name, isDel);
+        List<Object> list = Lists.newArrayList();
+        sql += generateSql(name, ptag, isDel, list);
         return jdbcTemplate.queryForObject(sql, list.toArray(), Long.class);
     }
-    public List<Video> searchAllVideos(String name, String isDel, int offset, int pageSize) {
-        String sql = videosql + " from video as a where 1=1";
-        List<String> list = Lists.newArrayList();
-        if (StringUtils.isNotBlank(isDel)) {
-            list.add(isDel);
+    public List<Video> searchAllVideos(String name, String ptag,String isDel, int offset, int pageSize) {
+        String sql;
+        if (StringUtils.isNotBlank(ptag)) {
+            sql = videosql + " from video as a join goods_tag as b on b.category_id=" + GoodsCategory.video.value() + " and a.id=b.goods_id";
+        } else {
+            sql = videosql + " from video as a where 1=1";
         }
-        if (StringUtils.isNotBlank(name)) {
-            list.add("%"+name+"%");
-        }
-        sql += generateSql(name, isDel);
-        sql += " limit " + offset + "," + pageSize;
+        List<Object> list = Lists.newArrayList();
+        sql += generateSql(name, ptag, isDel, list);
+        sql += " order by a.id limit " + offset + "," + pageSize;
         return jdbcTemplate.query(sql, list.toArray(),new VideoRowMapper());
     }
 
@@ -99,12 +103,12 @@ public class VideoDao {
         return (List<Video>) jdbcTemplate.query(sql, new VideoRowMapper());
     }
 
-    public void updateVideoInfo(int video_id, String video_name, String out_link, String producer, String description,String pic_link) {
-        String sql = "update video as a set a.video_name=?,a.out_link=?,a.producer=?,a.description=?,a.pic_link=? where a.id=?";
-        jdbcTemplate.update(sql, new Object[]{video_name, out_link, producer, description, pic_link, video_id});
+    public void updateVideoInfo(int video_id, String video_name, String out_link, String producer, String description,String pic_link,int duration) {
+        String sql = "update video as a set a.video_name=?,a.out_link=?,a.producer=?,a.description=?,a.pic_link=?,a.duration=? where a.id=?";
+        jdbcTemplate.update(sql, new Object[]{video_name, out_link, producer, description, pic_link, duration, video_id});
     }
-    public int insertVideoInfo(String video_name, String out_link,String pic_link, String producer, String description) {
-        String sql = "insert into video (video_name,out_link,pic_link,producer,description) values(?,?,?,?,?)";
+    public int insertVideoInfo(String video_name, String out_link,String pic_link, String producer, String description,int duration) {
+        String sql = "insert into video (video_name,out_link,pic_link,producer,description,duration) values(?,?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
             @Override
@@ -117,6 +121,7 @@ public class VideoDao {
                 ps.setString(3, pic_link);
                 ps.setString(4, producer);
                 ps.setString(5, description);
+                ps.setInt(6, duration);
                 return ps;
             }
         }, keyHolder);

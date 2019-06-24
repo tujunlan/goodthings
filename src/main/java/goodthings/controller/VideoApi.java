@@ -6,6 +6,7 @@ import goodthings.dao.VideoDao;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,13 +49,14 @@ public class VideoApi {
     @ApiOperation(value = "查询所有视频", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "video_name", value = "视频名", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "ptag", value = "大类", required = false, dataType = "int"),
             @ApiImplicitParam(name = "page", value = "页码", required = true, dataType = "int"),
             @ApiImplicitParam(name = "limit", value = "页内数量", required = true, dataType = "int")})
     @RequestMapping(value = "all_videos", method = RequestMethod.POST)
-    public String getAllVideos(String video_name, int page, int limit) {
+    public String getAllVideos(String video_name,String ptag, int page, int limit) {
         int offset = (page - 1) * limit;
-        long total = videoDao.getCountVideos(video_name, "0");
-        List<Video> videos = videoDao.searchAllVideos(video_name, "0", offset, limit);
+        long total = videoDao.getCountVideos(video_name, ptag,"0");
+        List<Video> videos = videoDao.searchAllVideos(video_name, ptag,"0", offset, limit);
         JSONObject jb = new JSONObject();
         jb.put("total", total);
         jb.put("items", videos);
@@ -82,13 +84,17 @@ public class VideoApi {
         JSONObject params = JSONObject.parseObject(json);
         int id = params.getIntValue("id");
         String video_name = params.getString("video_name");
+        int duration = -1;
+        if (StringUtils.isNotBlank(params.getString("duration"))) {
+            duration = params.getIntValue("duration");
+        }
         String pic_link = params.getString("pic_link");
         String producer = params.getString("producer");
         String out_link = params.getString("out_link");
         String description = params.getString("description");
         int ptag = params.getIntValue("ptag");
         String ctags = params.getString("ctags");
-        videoDao.updateVideoInfo(id, video_name, out_link, producer, description, pic_link);
+        videoDao.updateVideoInfo(id, video_name, out_link, producer, description, pic_link,duration);
         videoDao.insertVideoTag(id, ptag, ctags);
         return new ControllerResult(20000, "success").toJsonString();
     }
@@ -100,13 +106,17 @@ public class VideoApi {
     public String createVideoInfo(@RequestBody String json) {
         JSONObject params = JSONObject.parseObject(json);
         String video_name = params.getString("video_name");
+        int duration = -1;
+        if (StringUtils.isNotBlank(params.getString("duration"))) {
+            duration = params.getIntValue("duration");
+        }
         String pic_link = params.getString("pic_link");
         String producer = params.getString("producer");
         String out_link = params.getString("out_link");
         String description = params.getString("description");
         int ptag = params.getIntValue("ptag");
         String ctags = params.getString("ctags");
-        int id = videoDao.insertVideoInfo(video_name, out_link, pic_link, producer, description);
+        int id = videoDao.insertVideoInfo(video_name, out_link, pic_link, producer, description,duration);
         videoDao.insertVideoTag(id, ptag, ctags);
         return new ControllerResult(20000, id).toJsonString();
     }

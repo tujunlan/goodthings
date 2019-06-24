@@ -2,6 +2,9 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.video_name" placeholder="书名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-select v-model="listQuery.ptag" clearable style="width: 90px" class="filter-item">
+        <el-option v-for="item in ptaglist" :key="item.id" :label="item.name" :value="item.id" />
+      </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
@@ -39,6 +42,11 @@
           <span class="link-type" @click="handleUpdate(row)">{{ row.video_name }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="时长" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type">{{ row.duration }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="出品方" width="110px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.producer }}</span>
@@ -64,7 +72,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 400px; margin-left:50px;">
         <el-form-item label="标签">
           <div style="margin-bottom:10px; ">
             <el-radio-group v-model="temp.ptag" @change="ptagChange">
@@ -91,6 +99,11 @@
         </el-form-item>
         <el-form-item label="视频名称" prop="video_name">
           <el-input v-model="temp.video_name" />
+        </el-form-item>
+        <el-form-item label="时长" prop="duration">
+          <el-select v-model="temp.duration" value-key="id" clearable style="width: 150px" class="filter-item">
+            <el-option v-for="item in durationOptions" :key="item.id" :label="item.label" :value="item.id" />
+          </el-select>
         </el-form-item>
         <el-form-item label="出品方" prop="producer">
           <el-input v-model="temp.producer" />
@@ -166,7 +179,7 @@ export default {
         page: 1,
         limit: 20,
         video_name: undefined,
-        type: undefined
+        ptag: undefined
       },
       ptagQuery: {
         category_id: video_id
@@ -178,6 +191,7 @@ export default {
         id: undefined,
         pic_link: '',
         video_name: '',
+        duration: '',
         producer: '',
         out_link: '',
         description: '',
@@ -194,7 +208,26 @@ export default {
         producer: [{ required: true, message: 'producer is required', trigger: 'change' }],
         ptag: [{ required: true, message: 'ptag is required', trigger: 'change' }]
       },
-      downloadLoading: false
+      downloadLoading: false,
+      durationOptions: [{
+        id: 0,
+        label: '10m以下'
+      }, {
+        id: 1,
+        label: '10~20m'
+      }, {
+        id: 2,
+        label: '20~30m'
+      }, {
+        id: 3,
+        label: '30~40m'
+      }, {
+        id: 4,
+        label: '40~60m'
+      }, {
+        id: 6,
+        label: '60m以上'
+      }]
     }
   },
   created() {
@@ -233,6 +266,7 @@ export default {
       this.temp = {
         id: undefined,
         video_name: '',
+        duration: '',
         producer: '',
         out_link: '',
         pic_link: '',

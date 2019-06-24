@@ -16,6 +16,7 @@ public class VideoRowMapper implements RowMapper<Video> {
         video.setPic_link(resultSet.getString("pic_link"));
         video.setProducer(resultSet.getString("producer"));
         video.setDescription(resultSet.getString("description"));
+        video.setDuration(resultSet.getInt("duration"));
         video.setIsdel(resultSet.getInt("isdel"));
         video.setAdd_time(resultSet.getString("add_time").substring(0,19));
         try {
