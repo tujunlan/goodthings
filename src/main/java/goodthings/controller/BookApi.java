@@ -35,15 +35,19 @@ public class BookApi {
             @ApiImplicitParam(name = "page", value = "页码", required = true, dataType = "int"),
             @ApiImplicitParam(name = "limit", value = "页内数量", required = true, dataType = "int")})
     @RequestMapping(value = "tags_books", method = RequestMethod.POST)
-    public String getBooksByTags(@NotEmpty String tag_ids, Integer user_id, int page, int limit) {
+    public String getBooksByTags(String tag_ids, Integer user_id, int page, int limit) {
         int offset = (page - 1) * limit;
         List<Book> books;
+        long total = 0;
         if (user_id!=null && user_id > 0) {
             books = bookDao.searchBooksExcludeHad(tag_ids, user_id, offset, limit);
+            total = bookDao.getTotalBooksExcludeHad(tag_ids, user_id);
         } else {
             books = bookDao.searchBooksByTags(tag_ids, offset, limit);
+            total = bookDao.getTotalBooksByTags(tag_ids);
         }
         JSONObject jb = new JSONObject();
+        jb.put("total", total);
         jb.put("items", books);
         return new ControllerResult(20000, jb).toJsonString();
     }
@@ -72,7 +76,7 @@ public class BookApi {
             @ApiImplicitParam(name = "offset", value = "起点位置", required = true, dataType = "int"),
             @ApiImplicitParam(name = "pagesize", value = "页内数量", required = true, dataType = "int")})
     @RequestMapping(value = "tags_books_referme", method = RequestMethod.POST)
-    public String getGoodsByTags(int user_id, String ref_type, int offset, int pagesize) {
+    public String getBooksReferMe(int user_id, String ref_type, int offset, int pagesize) {
         List<Book> books = bookDao.searchMyBooks(user_id, ref_type, offset, pagesize);
         JSONObject jb = new JSONObject();
         jb.put("items", books);

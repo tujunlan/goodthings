@@ -71,7 +71,7 @@ public class BookDao {
         return jdbcTemplate.query(sql, list.toArray(),new BookRowMapper());
     }
 
-    public List<Book> searchBooksByTags(String tagIds, int offset, int pageSize){
+    private String genBooksByTagsSql(String tagIds){
         String query = null;
         List<String> ids = Splitter.on(",").splitToList(tagIds);
         if (ids.size() == 1) {//有可能是父tag
@@ -83,18 +83,34 @@ public class BookDao {
         if (query == null) {
             query = Joiner.on(",").join(ids);
         }
-        String sql = booksql + ",c.owner_num,c.approval_num from book as a"
+        String sql = " from book as a"
                 + " join goods_tag as b on a.id=b.goods_id and b.category_id=" + GoodsCategory.book.value()
                 + " left join popular as c on b.goods_id=c.goods_id and c.category_id=" + GoodsCategory.book.value()
-                + " where a.isdel=0 and b.tag_id in (" + query + ") order by c.approval_num desc,c.owner_num desc limit " + offset + "," + pageSize;
+                + " where a.isdel=0 and b.tag_id in (" + query + ")";
+        return sql;
+    }
+    public long getTotalBooksByTags(String tagIds){
+        String sql = "select count(1)" + genBooksByTagsSql(tagIds);
+        return jdbcTemplate.queryForObject(sql, Long.class);
+    }
+    public List<Book> searchBooksByTags(String tagIds, int offset, int pageSize){
+        String sql = booksql + ",c.owner_num,c.approval_num"+genBooksByTagsSql(tagIds)+" order by c.approval_num desc,c.owner_num desc limit " + offset + "," + pageSize;
         return (List<Book>) jdbcTemplate.query(sql, new BookRowMapper());
     }
-    public List<Book> searchBooksExcludeHad(String tagIds,int userId,int offset,int pageSize){
-        String sql = booksql + ",c.owner_num,c.approval_num from book as a"
+    private String genBooksExcludeHadSql(String tagIds, int userId){
+        String sql = " from book as a"
                 + " join goods_tag as b on a.id=b.goods_id and b.category_id=" + GoodsCategory.book.value()
                 + " join popular as c on b.goods_id=c.b.goods_id and c.category_id=" + GoodsCategory.book.value()
                 + " left join user_goods as d on a.id=d.goods_id and d.category_id=" + GoodsCategory.book.value() + " d.user_id=" + userId
-                + " where a.isdel=0 and b.tag_id in (" + tagIds + ") and d.user_id is null order by c.approval_num,c.owner_num desc limit " + offset + "," + pageSize;
+                + " where a.isdel=0 and b.tag_id in (" + tagIds + ") and d.user_id is null";
+        return sql;
+    }
+    public long getTotalBooksExcludeHad(String tagIds,int userId){
+        String sql = "select count(1)" + genBooksExcludeHadSql(tagIds, userId);
+        return jdbcTemplate.queryForObject(sql, Long.class);
+    }
+    public List<Book> searchBooksExcludeHad(String tagIds,int userId,int offset,int pageSize){
+        String sql = booksql + ",c.owner_num,c.approval_num" + genBooksExcludeHadSql(tagIds, userId) + "  order by c.approval_num,c.owner_num desc limit " + offset + "," + pageSize;
         return (List<Book>) jdbcTemplate.query(sql, new BookRowMapper());
     }
 
