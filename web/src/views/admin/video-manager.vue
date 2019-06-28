@@ -44,7 +44,14 @@
       </el-table-column>
       <el-table-column label="时长" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type">{{ row.duration }}</span>
+          <span class="link-type"><el-select v-model="row.duration" disabled placeholder="请选择">
+          <el-option
+            v-for="item in durationOptions"
+            :key="item.id"
+            :label="item.label"
+            :value="item.id">
+          </el-option>
+        </el-select></span>
         </template>
       </el-table-column>
       <el-table-column label="出品方" width="110px" align="center">
@@ -330,15 +337,24 @@ export default {
               tempData.ctags = '';
             }
             createVideo(tempData).then(response => {
-              this.temp.id = response.data
-              this.list.unshift(this.temp)
-              this.dialogFormVisible = false
-              this.$notify({
-                title: '成功',
-                message: '创建成功',
-                type: 'success',
-                duration: 2000
-              })
+              var code = response.code
+              if (code == 20000) {
+                this.temp.id = response.data;
+                this.list.unshift(this.temp)
+                this.dialogFormVisible = false
+                this.$notify({
+                  title: '成功',
+                  message: '创建成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              }else{
+                this.$alert({
+                  title: '失败',
+                  message: '创建创建',
+                  duration: 2000
+                })
+              }
             })
           }
         }
