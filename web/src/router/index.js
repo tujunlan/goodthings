@@ -55,7 +55,7 @@ export const constantRoutes = [
     }]
   },
   {
-    path: '/书单',
+    path: '/booklist',
     component: Layout,
     children: [
       {
@@ -67,9 +67,8 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/admin',
+    path: '/manager',
     component: Layout,
-    redirect: '/admin/manager',
     name: '后台维护',
     meta: { title: '后台维护', icon: 'example' },
     children: [
@@ -187,7 +186,9 @@ export const constantRoutes = [
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support
+  base: process.env.NODE_ENV === "production" ? "/admin" : "",
+  // base: "/admin",
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })

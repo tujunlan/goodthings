@@ -76,7 +76,7 @@ public class BookDao {
         List<String> ids = Splitter.on(",").splitToList(tagIds);
         if (ids.size() == 1) {//有可能是父tag
             List<Integer> temp = goodThingsDao.getChildTagsId(Integer.parseInt(tagIds));
-            if (temp != null) {
+            if (temp != null && !temp.isEmpty()) {
                 query = Joiner.on(",").join(temp) + "," + tagIds;
             }
         }
@@ -90,8 +90,8 @@ public class BookDao {
         return sql;
     }
     public long getTotalBooksByTags(String tagIds){
-        String sql = "select count(1)" + genBooksByTagsSql(tagIds);
-        return jdbcTemplate.queryForObject(sql, Long.class);
+        String sql = "select distinct a.id" + genBooksByTagsSql(tagIds);
+        return jdbcTemplate.queryForList(sql).size();
     }
     public List<Book> searchBooksByTags(String tagIds, int offset, int pageSize){
         String sql = booksql + ",c.owner_num,c.approval_num"+genBooksByTagsSql(tagIds)+" order by c.approval_num desc,c.owner_num desc limit " + offset + "," + pageSize;
@@ -106,8 +106,8 @@ public class BookDao {
         return sql;
     }
     public long getTotalBooksExcludeHad(String tagIds,int userId){
-        String sql = "select count(1)" + genBooksExcludeHadSql(tagIds, userId);
-        return jdbcTemplate.queryForObject(sql, Long.class);
+        String sql = "select distinct a.id" + genBooksExcludeHadSql(tagIds, userId);
+        return jdbcTemplate.queryForList(sql).size();
     }
     public List<Book> searchBooksExcludeHad(String tagIds,int userId,int offset,int pageSize){
         String sql = booksql + ",c.owner_num,c.approval_num" + genBooksExcludeHadSql(tagIds, userId) + "  order by c.approval_num,c.owner_num desc limit " + offset + "," + pageSize;

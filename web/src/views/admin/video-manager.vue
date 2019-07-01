@@ -37,12 +37,12 @@
           </a>
         </template>
       </el-table-column>
-      <el-table-column label="视频名称" min-width="150px">
+      <el-table-column label="视频名称" min-width="50px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.video_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="时长" min-width="150px">
+      <el-table-column label="时长" min-width="50px">
         <template slot-scope="{row}">
           <span class="link-type"><el-select v-model="row.duration" disabled placeholder="请选择">
           <el-option
@@ -54,17 +54,17 @@
         </el-select></span>
         </template>
       </el-table-column>
-      <el-table-column label="出品方" width="110px" align="center">
+      <el-table-column label="语言" width="110px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.producer }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="简单描述" width="80px">
+      <el-table-column label="视频地址" width="280px">
         <template slot-scope="scope">
           <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
@@ -112,13 +112,13 @@
             <el-option v-for="item in durationOptions" :key="item.id" :label="item.label" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item label="出品方" prop="producer">
+        <el-form-item label="语言" prop="producer">
           <el-input v-model="temp.producer" />
         </el-form-item>
         <el-form-item label="外链地址" prop="out_link">
           <el-input v-model="temp.out_link" />
         </el-form-item>
-        <el-form-item label="简介">
+        <el-form-item label="视频地址">
           <el-input v-model="temp.description" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
         </el-form-item>
       </el-form>
