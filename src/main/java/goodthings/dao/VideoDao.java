@@ -30,7 +30,7 @@ public class VideoDao {
     private GoodThingsDao goodThingsDao;
 
     final String videosql = "select DISTINCT a.id,a.video_name,a.out_link,a.pic_link,a.producer,a.description,a.duration,a.isdel,a.add_time";
-    private String generateSql(String name,String ptag, String isDel,List<Object> args){
+    private String generateSql(String name, String ptag, String isDel,List<Object> args){
         String sql = "";
         if (StringUtils.isNotBlank(isDel)) {
             sql += " and a.isdel = ?";
@@ -46,6 +46,7 @@ public class VideoDao {
         }
         return sql;
     }
+
     public long getCountVideos(String name, String ptag, String isDel) {
         String sql;
         if (StringUtils.isNotBlank(ptag)) {
@@ -57,7 +58,7 @@ public class VideoDao {
         sql += generateSql(name, ptag, isDel, list);
         return jdbcTemplate.queryForObject(sql, list.toArray(), Long.class);
     }
-    public List<Video> searchAllVideos(String name, String ptag,String isDel, int offset, int pageSize) {
+    public List<Video> searchAllVideos(String name,String ptag, String isDel, int offset, int pageSize) {
         String sql;
         if (StringUtils.isNotBlank(ptag)) {
             sql = videosql + " from video as a join goods_tag as b on b.category_id=" + GoodsCategory.video.value() + " and a.id=b.goods_id";
@@ -70,36 +71,53 @@ public class VideoDao {
         return jdbcTemplate.query(sql, list.toArray(),new VideoRowMapper());
     }
 
-    public List<Video> searchVideosByTags(String tagIds, int offset, int pageSize){
+    private String genVideosByTagsSql(String tagIds){
         String query = null;
         List<String> ids = Splitter.on(",").splitToList(tagIds);
         if (ids.size() == 1) {//有可能是父tag
             List<Integer> temp = goodThingsDao.getChildTagsId(Integer.parseInt(tagIds));
-            if (temp != null) {
+            if (temp != null && !temp.isEmpty()) {
                 query = Joiner.on(",").join(temp) + "," + tagIds;
             }
         }
         if (query == null) {
             query = Joiner.on(",").join(ids);
         }
-        String sql = videosql + ",c.owner_num,c.approval_num from video as a"
+        String sql = " from video as a"
                 + " join goods_tag as b on a.id=b.goods_id and b.category_id=" + GoodsCategory.video.value()
                 + " left join popular as c on b.goods_id=c.goods_id and c.category_id=" + GoodsCategory.video.value()
-                + " where a.isdel=0 and b.tag_id in (" + query + ") order by c.approval_num desc,c.owner_num desc limit " + offset + "," + pageSize;
+                + " where a.isdel=0 and b.tag_id in (" + query + ")";
+        return sql;
+    }
+    public long getTotalVideosByTags(String tagIds){
+        String sql = "select distinct a.id" + genVideosByTagsSql(tagIds);
+        return jdbcTemplate.queryForList(sql).size();
+    }
+    public List<Video> searchVideosByTags(String tagIds, int offset, int pageSize){
+        String sql = videosql + ",c.owner_num,c.approval_num"+genVideosByTagsSql(tagIds)+" order by c.approval_num desc,c.owner_num desc limit " + offset + "," + pageSize;
         return (List<Video>) jdbcTemplate.query(sql, new VideoRowMapper());
     }
-    public List<Video> searchVideosExcludeHad(String tagIds,int userId,int offset,int pageSize){
-        String sql = videosql + ",c.owner_num,c.approval_num from video as a"
+    private String genVideosExcludeHadSql(String tagIds, int userId){
+        String sql = " from video as a"
                 + " join goods_tag as b on a.id=b.goods_id and b.category_id=" + GoodsCategory.video.value()
                 + " join popular as c on b.goods_id=c.b.goods_id and c.category_id=" + GoodsCategory.video.value()
                 + " left join user_goods as d on a.id=d.goods_id and d.category_id=" + GoodsCategory.video.value() + " d.user_id=" + userId
-                + " where a.isdel=0 and b.tag_id in (" + tagIds + ") and d.user_id is null order by c.approval_num,c.owner_num desc limit " + offset + "," + pageSize;
+                + " where a.isdel=0 and b.tag_id in (" + tagIds + ") and d.user_id is null";
+        return sql;
+    }
+    public long getTotalVideosExcludeHad(String tagIds,int userId){
+        String sql = "select distinct a.id" + genVideosExcludeHadSql(tagIds, userId);
+        return jdbcTemplate.queryForList(sql).size();
+    }
+    public List<Video> searchVideosExcludeHad(String tagIds,int userId,int offset,int pageSize){
+        String sql = videosql + ",c.owner_num,c.approval_num" + genVideosExcludeHadSql(tagIds, userId) + "  order by c.approval_num,c.owner_num desc limit " + offset + "," + pageSize;
         return (List<Video>) jdbcTemplate.query(sql, new VideoRowMapper());
     }
 
-    public List<Video> searchMyVideos(int userId,int wantHad,int offset,int pageSize) {
-        String sql = videosql + "  from user_goods as b join video as a on b.category_id=" + GoodsCategory.video.value()
-                + " and b.goods_id=a.id and b.user_id=" + userId + " and b.want_had=" + wantHad+" order by b.id limit " + offset + "," + pageSize;
+    public List<Video> searchMyVideos(int userId,String wantHad,int offset,int pageSize) {
+        String tbname = "user_goods_" + wantHad;
+        String sql = videosql + " from video as a join " + tbname + " as b on b.category_id=" + GoodsCategory.video.value()
+                + " and b.goods_id=a.id and b.user_id=" + userId + " order by a.id limit " + offset + "," + pageSize;
         return (List<Video>) jdbcTemplate.query(sql, new VideoRowMapper());
     }
 

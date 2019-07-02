@@ -37,21 +37,14 @@
           </a>
         </template>
       </el-table-column>
-      <el-table-column label="视频名称" min-width="50px">
+      <el-table-column label="视频名称" width="350px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.video_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="时长" min-width="50px">
+      <el-table-column label="时长" width="150px">
         <template slot-scope="{row}">
-          <span class="link-type"><el-select v-model="row.duration" disabled placeholder="请选择">
-          <el-option
-            v-for="item in durationOptions"
-            :key="item.id"
-            :label="item.label"
-            :value="item.id">
-          </el-option>
-        </el-select></span>
+          <span class="link-type">{{ durationOption[row.duration]}}</span>
         </template>
       </el-table-column>
       <el-table-column label="语言" width="110px" align="center">
@@ -59,7 +52,7 @@
           <span>{{ scope.row.producer }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="视频地址" width="280px">
+      <el-table-column label="视频地址" min-width="480px">
         <template slot-scope="scope">
           <span>{{ scope.row.description }}</span>
         </template>
@@ -167,6 +160,7 @@ import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 const video_id = 3;
+const durationOption = {0: '10m以下', 1: '10~20m', 2: '20~30m', 3: '30~40m', 4: '40~60m', 6: '60m以上'};
 export default {
   name: 'videoManager',
   components: { Pagination },
@@ -176,6 +170,7 @@ export default {
   data() {
     return {
       video_id,
+      durationOption,
       uploadApi: this.GLOBAL.uploadApi,
       checkedCtags: [],
       tableKey: 0,
